@@ -32,10 +32,15 @@ public class StudentController {
         return ResponseEntity.ok(studentService.save(studentDto,files));
     }
 
-    @GetMapping("/test")
-    public Student getTest(long id){
-        return studentService.getStudent(id);
+    @GetMapping()
+    public byte[] getStudentPhoto(String id) throws IOException {
+        long studentId = Long.parseLong(id);
+        byte[] a= fileService.getFile(studentId);
+        System.out.println(a.length);
+        return a;
     }
+
+
 
 
 

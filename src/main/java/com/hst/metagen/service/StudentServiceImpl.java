@@ -31,4 +31,10 @@ public class StudentServiceImpl implements StudentService {
     public Student getStudent(long id){
         return studentRepository.getById(id);
     }
+
+    @Override
+    public Byte[] getStudentPhoto(long id) {
+        Student student = studentRepository.getById(id);
+        return null;
+    }
 }

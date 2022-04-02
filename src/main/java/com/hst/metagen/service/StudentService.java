@@ -9,4 +9,5 @@ import java.io.IOException;
 public interface StudentService {
     Student save(StudentDto studentDto, MultipartFile file) throws IOException;
     Student getStudent(long id);
+    Byte[] getStudentPhoto(long id);
 }

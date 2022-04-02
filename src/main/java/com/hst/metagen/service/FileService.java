@@ -9,4 +9,6 @@ public interface FileService {
     String getFileAbsolutePath(MultipartFile multipartFile, String fileBasePath, String identityNumber) throws IOException;
 
     Student saveFile(Student student,MultipartFile multipartFile) throws IOException;
+
+    byte[] getFile(Long studentId) throws IOException;
 }
