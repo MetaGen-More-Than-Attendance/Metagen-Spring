@@ -21,7 +21,6 @@ public class Student {
 
     private String password;
 
-    @Lob
-    private byte[] facePhoto;
+    private String photoPath;
 
 }
