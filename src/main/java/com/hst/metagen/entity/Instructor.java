@@ -3,7 +3,6 @@ package com.hst.metagen.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Data
 @Entity
@@ -22,3 +21,10 @@ public class Instructor {
     @OneToOne
     private Lecture givenLectures;
 }
+
+
+
+
+
+
+

@@ -12,6 +12,4 @@ public class Absenteeism {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne
-    private Lecture lecture;
 }

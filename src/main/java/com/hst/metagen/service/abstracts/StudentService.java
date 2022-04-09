@@ -1,4 +1,4 @@
-package com.hst.metagen.service;
+package com.hst.metagen.service.abstracts;
 
 import org.springframework.web.multipart.MultipartFile;
 
