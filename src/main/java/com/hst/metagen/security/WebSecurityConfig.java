@@ -32,17 +32,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
     @Autowired
     public void configurePasswordEncoder(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(userService).passwordEncoder(getBCryptPasswordEncoder());
-    }
-
-    @Bean
-    public BCryptPasswordEncoder getBCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        builder.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Bean
@@ -73,8 +71,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
-
-
 
 }

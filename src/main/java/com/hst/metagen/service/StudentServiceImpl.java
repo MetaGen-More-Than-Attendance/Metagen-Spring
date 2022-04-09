@@ -4,6 +4,7 @@ import com.hst.metagen.dto.StudentDto;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.mapper.StudentMapper;
 import com.hst.metagen.repository.StudentRepository;
+import com.hst.metagen.service.abstracts.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
