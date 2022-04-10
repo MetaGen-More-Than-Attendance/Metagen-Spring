@@ -1,8 +1,8 @@
 package com.hst.metagen.controller;
 
-import com.hst.metagen.dto.StudentDto;
-import com.hst.metagen.service.FileService;
+import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.requests.CreateStudentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 
@@ -24,21 +23,15 @@ public class StudentController {
 
     private final FileService fileService;
 
-    @PostMapping(consumes = {APPLICATION_JSON_VALUE,MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> saveStudent(@RequestPart("studentDto") StudentDto studentDto, @RequestPart(value = "file") MultipartFile files) throws IOException {
-        return ResponseEntity.ok(studentService.save(studentDto,files));
+    @PostMapping(value = "/register",consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveStudent(@RequestPart(value = "studentDto") CreateStudentDto studentDto, @RequestParam(value = "file")MultipartFile file) throws IOException {
+        return ResponseEntity.ok(studentService.save(studentDto,file));
     }
 
-    @GetMapping()
-    public byte[] getStudentPhoto(String id) throws IOException {
-        long studentId = Long.parseLong(id);
-        byte[] a= fileService.getFile(studentId);
+    @PostMapping("/get-photo")
+    public byte[] getStudentPhoto(@RequestParam Long id) throws IOException {
+        byte[] a= fileService.getFile(id);
         System.out.println(a.length);
         return a;
     }
-
-
-
-
-
 }

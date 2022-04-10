@@ -1,7 +1,8 @@
-package com.hst.metagen.service;
+package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.StudentRepository;
+import com.hst.metagen.service.abstracts.FileService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getFileAbsolutePath(MultipartFile multipartFile, String fileBasePath,String identityNumber) throws IOException {
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        String filePath =  fileBasePath +"id#"+identityNumber+"#date#"+ new Date().getTime() + "."+extension;
+        String filePath =  fileBasePath + identityNumber + "." + extension;
         Path basePath = Paths.get(fileBasePath);
         if (!Files.exists(basePath)){
             Files.createDirectories(basePath);
