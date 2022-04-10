@@ -1,25 +1,26 @@
 package com.hst.metagen.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-public class Instructor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="instructors")
+@PrimaryKeyJoinColumn(name = "instructor_id", referencedColumnName = "user_id")
+public class Instructor extends User {
 
-    private String name;
+    @Column(name="instructor_id", insertable = false, updatable = false)
+    private int instructorId;
 
-    private String surname;
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Lecture> lectures;
 
-    private String identityNumber;
-
-    @OneToOne
-    private Lecture givenLectures;
 }
 
 

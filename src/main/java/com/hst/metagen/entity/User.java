@@ -13,7 +13,8 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name="users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,9 +25,16 @@ public class User {
     @Column(name="user_name")
     private String userName;
 
-    @NotNull(message = "Name field is mandatory")
+    @NotNull(message = "Surname field is mandatory")
     @Column(name="user_surname")
     private String userSurname;
+
+    @Column(name = "identity_number")
+    @NotNull(message = "Identity Number field is mandatory")
+    private String identityNumber;
+
+    @Column(name = "photo_path")
+    private String photoPath;
 
     @Column(name="user_mail")
     @Email(message = "Email is not valid")

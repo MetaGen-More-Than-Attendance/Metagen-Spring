@@ -1,26 +1,23 @@
 package com.hst.metagen.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="students")
+@PrimaryKeyJoinColumn(name = "student_id", referencedColumnName = "user_id")
+public class Student extends User {
 
-    private String name;
+    @Column(name="student_id", insertable = false, updatable = false)
+    private int studentId;
 
-    private String surname;
-
-    private String identityNumber;
-
-    private String password;
-
-    private String photoPath;
-
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Absenteeism> absenteeisms;
 }

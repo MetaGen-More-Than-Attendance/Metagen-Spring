@@ -33,7 +33,7 @@ public class AuthController {
         this.modelMapper = modelMapper;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(
@@ -55,7 +55,7 @@ public class AuthController {
 
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping("/register")
     public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) throws Exception {
         return ResponseEntity.ok(userService.save(userDto));
     }

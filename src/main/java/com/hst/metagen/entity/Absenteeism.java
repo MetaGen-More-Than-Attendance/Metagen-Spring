@@ -10,6 +10,13 @@ public class Absenteeism {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="lecture_id")
+    private Lecture lecture;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="student_id")
+    private Student student;
 }
