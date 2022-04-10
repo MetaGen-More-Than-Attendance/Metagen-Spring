@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
@@ -19,25 +17,21 @@ public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="user_id")
-    private int userId;
+    private Long userId;
 
-    @NotNull(message = "Name field is mandatory")
     @Column(name="user_name")
     private String userName;
 
-    @NotNull(message = "Surname field is mandatory")
     @Column(name="user_surname")
     private String userSurname;
 
     @Column(name = "identity_number")
-    @NotNull(message = "Identity Number field is mandatory")
     private String identityNumber;
 
     @Column(name = "photo_path")
     private String photoPath;
 
     @Column(name="user_mail")
-    @Email(message = "Email is not valid")
     private String userMail;
 
     @Column(name="user_password")

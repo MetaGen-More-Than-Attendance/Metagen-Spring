@@ -1,13 +1,13 @@
 package com.hst.metagen.service.abstracts;
 
-import com.hst.metagen.dto.StudentDto;
 import com.hst.metagen.entity.Student;
+import com.hst.metagen.service.requests.CreateStudentDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public interface StudentService {
-    Student save(StudentDto studentDto, MultipartFile file) throws IOException;
-    Student getStudent(long id);
-    Byte[] getStudentPhoto(long id);
+    Student save(CreateStudentDto createStudentDto, MultipartFile file) throws IOException;
+    Student getStudent(Long id);
+    byte[] getStudentPhoto(Long id) throws IOException;
 }

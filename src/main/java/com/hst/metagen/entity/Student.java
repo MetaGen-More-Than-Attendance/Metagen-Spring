@@ -16,8 +16,12 @@ import java.util.List;
 public class Student extends User {
 
     @Column(name="student_id", insertable = false, updatable = false)
-    private int studentId;
+    private Long studentId;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Absenteeism> absenteeisms;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "lectureStudents")
+    private List<Lecture> studentLectures;
+
 }

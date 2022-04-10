@@ -16,7 +16,7 @@ import java.util.List;
 public class Instructor extends User {
 
     @Column(name="instructor_id", insertable = false, updatable = false)
-    private int instructorId;
+    private Long instructorId;
 
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Lecture> lectures;

@@ -1,16 +1,28 @@
 package com.hst.metagen.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
-@Entity
 @Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="absenteeisms")
 public class Absenteeism {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+    @Column(name = "absenteeism_id")
+    private Long absenteeismId;
+
+    @Column(name = "absenteeism")
+    private boolean absenteeism;
+
+    @Column(name = "absenteeism_date")
+    private LocalDate absenteeismDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="lecture_id")

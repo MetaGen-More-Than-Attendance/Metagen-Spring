@@ -2,6 +2,7 @@ package com.hst.metagen.mapper;
 
 import com.hst.metagen.dto.StudentDto;
 import com.hst.metagen.entity.Student;
+import com.hst.metagen.service.requests.CreateStudentDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -10,6 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface StudentMapper {
     StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
-    Student studentToDto(StudentDto studentDto);
+    Student studentToDto(CreateStudentDto studentDto);
     StudentDto dtoToStudent(Student student);
 }
