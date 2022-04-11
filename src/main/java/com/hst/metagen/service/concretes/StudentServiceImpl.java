@@ -8,7 +8,6 @@ import com.hst.metagen.service.requests.CreateStudentDto;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,10 +24,10 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     @Override
-    public Student save(CreateStudentDto studentDto, MultipartFile file) throws IOException {
+    public Student save(CreateStudentDto studentDto, String base64Image) throws IOException {
         Student student = modelMapperService.forRequest().map(studentDto, Student.class); //StudentMapper.INSTANCE.studentToDto(studentDto);
-        if (!file.isEmpty()){
-            student = fileService.saveFile(student,file);
+        if (base64Image!=null){
+            student = fileService.saveFile(student,base64Image);
         }
         return studentRepository.save(student);
     }

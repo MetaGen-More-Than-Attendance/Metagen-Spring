@@ -6,11 +6,8 @@ import com.hst.metagen.service.requests.CreateStudentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 
 @RestController
@@ -23,9 +20,11 @@ public class StudentController {
 
     private final FileService fileService;
 
-    @PostMapping(value = "/register",consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> saveStudent(@RequestPart(value = "studentDto") CreateStudentDto studentDto, @RequestParam(value = "file")MultipartFile file) throws IOException {
-        return ResponseEntity.ok(studentService.save(studentDto,file));
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> saveStudent(@RequestBody CreateStudentDto studentDto) throws IOException {
+
+        String base64Image = studentDto.getImageBase64();
+        return ResponseEntity.ok(studentService.save(studentDto,base64Image));
     }
 
     @PostMapping("/get-photo")
