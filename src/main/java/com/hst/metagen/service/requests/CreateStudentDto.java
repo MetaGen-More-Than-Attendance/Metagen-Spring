@@ -28,4 +28,10 @@ public class CreateStudentDto {
     @NotNull(message = "Password field is mandatory")
     private String userPassword;
 
+    @NotNull(message = "Department field is mandatory")
+    private Long departmentId;
+
+    @NotNull(message = "Image field is mandatory")
+    private String imageBase64;
+
 }
