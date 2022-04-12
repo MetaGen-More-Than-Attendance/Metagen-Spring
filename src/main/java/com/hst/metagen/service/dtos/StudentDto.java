@@ -1,4 +1,4 @@
-package com.hst.metagen.dto;
+package com.hst.metagen.service.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentDto {
+    private String studentId;
+
     private String name;
 
     private String surname;
