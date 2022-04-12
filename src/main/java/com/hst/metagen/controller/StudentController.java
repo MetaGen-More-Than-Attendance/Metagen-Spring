@@ -19,13 +19,10 @@ public class StudentController {
     private final StudentService studentService;
     private final FileService fileService;
 
-    private final FileService fileService;
-
     @PostMapping(value = "/register")
     public ResponseEntity<?> saveStudent(@RequestBody CreateStudentDto studentDto) throws IOException {
 
-        String base64Image = studentDto.getImageBase64();
-        return ResponseEntity.ok(studentService.save(studentDto,base64Image));
+        return ResponseEntity.ok(studentService.save(studentDto));
     }
 
     @PostMapping("/get-photo")
