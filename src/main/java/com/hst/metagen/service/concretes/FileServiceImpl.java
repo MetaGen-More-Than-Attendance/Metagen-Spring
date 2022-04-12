@@ -50,6 +50,7 @@ public class FileServiceImpl implements FileService {
         byte[] imageByte = Base64.getDecoder().decode(strings[1]);
 
         String path = getFileAbsolutePath(extension,"photos/",student.getIdentityNumber());
+        student.setPhotoPath(path);
         File file = new File(path);
 
         try (FileOutputStream fosFor = new FileOutputStream(file)) {
@@ -62,8 +63,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public byte[] getFile(Long studentId) throws IOException {
         Student student = studentRepository.getById(studentId);
-        //Path path = Paths.get(student.getPhotoPath());
-        byte[] data = Base64.getDecoder().decode(student.getImageBase64()); //Files.readAllBytes(path);
+        Path path = Paths.get(student.getPhotoPath());
+        byte[] data = Files.readAllBytes(path);
         return data;
 
     }

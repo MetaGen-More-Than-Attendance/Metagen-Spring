@@ -18,9 +18,6 @@ public class Student extends User {
     @Column(name="student_id", insertable = false, updatable = false)
     private Long studentId;
 
-    @Column(name = "image_base64")
-    private String imageBase64;
-
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Absenteeism> absenteeisms;
 
