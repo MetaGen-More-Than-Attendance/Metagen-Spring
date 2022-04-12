@@ -1,5 +1,6 @@
 package com.hst.metagen.controller;
 
+import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.requests.CreateStudentDto;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.io.IOException;
 public class StudentController {
 
     private final StudentService studentService;
+    private final FileService fileService;
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> saveStudent(@RequestBody CreateStudentDto studentDto) throws IOException {

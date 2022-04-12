@@ -1,10 +1,12 @@
 package com.hst.metagen.service.abstracts;
 
-import com.hst.metagen.entity.Student;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.CreateStudentDto;
 
+import java.io.IOException;
+
 public interface StudentService {
-    Student save(CreateStudentDto createStudentDto);
-    Student getStudent(Long studentId);
-    byte[] getStudentPhoto(Long studentId);
+    StudentDto save(CreateStudentDto createStudentDto) throws IOException;
+    StudentDto getStudent(Long studentId);
+    byte[] getStudentPhoto(Long studentId) throws IOException;
 }
