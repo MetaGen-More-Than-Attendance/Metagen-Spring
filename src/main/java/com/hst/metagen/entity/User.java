@@ -28,6 +28,9 @@ public class User {
     @Column(name = "identity_number")
     private String identityNumber;
 
+    @Column(name = "photo_path")
+    private String photoPath;
+
     @Column(name="user_mail")
     private String userMail;
 
