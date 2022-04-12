@@ -19,14 +19,18 @@ public class StudentController {
     private final StudentService studentService;
     private final FileService fileService;
 
+    private final FileService fileService;
+
     @PostMapping(value = "/register")
     public ResponseEntity<?> saveStudent(@RequestBody CreateStudentDto studentDto) throws IOException {
-        return ResponseEntity.ok(studentService.save(studentDto));
+
+        String base64Image = studentDto.getImageBase64();
+        return ResponseEntity.ok(studentService.save(studentDto,base64Image));
     }
 
     @PostMapping("/get-photo")
-    public byte[] getStudentPhoto(@RequestParam Long studentId) throws IOException {
-        byte[] a= studentService.getStudentPhoto(studentId);
+    public byte[] getStudentPhoto(@RequestParam Long id) throws IOException {
+        byte[] a= fileService.getFile(id);
         System.out.println(a.length);
         return a;
     }
