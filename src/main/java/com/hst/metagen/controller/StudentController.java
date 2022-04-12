@@ -17,6 +17,7 @@ import java.io.IOException;
 public class StudentController {
 
     private final StudentService studentService;
+    private final FileService fileService;
 
     private final FileService fileService;
 

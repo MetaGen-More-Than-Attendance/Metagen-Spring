@@ -64,8 +64,7 @@ public class FileServiceImpl implements FileService {
     public byte[] getFile(Long studentId) throws IOException {
         Student student = studentRepository.getById(studentId);
         Path path = Paths.get(student.getPhotoPath());
-        byte[] data = Files.readAllBytes(path);
-        return data;
+        return Files.readAllBytes(path);
 
     }
 }

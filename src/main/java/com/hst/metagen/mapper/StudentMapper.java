@@ -1,6 +1,6 @@
 package com.hst.metagen.mapper;
 
-import com.hst.metagen.dto.StudentDto;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.service.requests.CreateStudentDto;
 import org.mapstruct.Mapper;
