@@ -1,6 +1,5 @@
 package com.hst.metagen.controller;
 
-import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.requests.CreateStudentDto;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +17,14 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    private final FileService fileService;
-
     @PostMapping(value = "/register")
     public ResponseEntity<?> saveStudent(@RequestBody CreateStudentDto studentDto) throws IOException {
-
-        String base64Image = studentDto.getImageBase64();
-        return ResponseEntity.ok(studentService.save(studentDto,base64Image));
+        return ResponseEntity.ok(studentService.save(studentDto));
     }
 
     @PostMapping("/get-photo")
-    public byte[] getStudentPhoto(@RequestParam Long id) throws IOException {
-        byte[] a= fileService.getFile(id);
+    public byte[] getStudentPhoto(@RequestParam Long studentId) throws IOException {
+        byte[] a= studentService.getStudentPhoto(studentId);
         System.out.println(a.length);
         return a;
     }
