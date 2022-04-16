@@ -1,5 +1,6 @@
 package com.hst.metagen.service.concretes;
 
+import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.FileService;
@@ -57,6 +58,34 @@ public class FileServiceImpl implements FileService {
         }
 
         return student;
+    }
+
+    @Override
+    public Instructor saveFile(Instructor instructor, String base64Image) throws IOException {
+        String[] strings = base64Image.split(",");
+        String extension;
+        switch (strings[0]) {//check image's extension
+            case "data:image/jpeg;base64":
+                extension = "jpeg";
+                break;
+            case "data:image/png;base64":
+                extension = "png";
+                break;
+            default://should write cases for more images types
+                extension = "jpg";
+                break;
+        }
+
+        byte[] imageByte = Base64.getDecoder().decode(strings[1]);
+
+        String path = getFileAbsolutePath(extension,"photos/",instructor.getIdentityNumber());
+        File file = new File(path);
+
+        try (FileOutputStream fosFor = new FileOutputStream(file)) {
+            fosFor.write(imageByte);
+        }
+
+        return instructor;
     }
 
     @Override

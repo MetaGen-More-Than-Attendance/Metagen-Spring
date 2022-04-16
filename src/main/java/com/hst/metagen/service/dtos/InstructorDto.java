@@ -1,13 +1,14 @@
 package com.hst.metagen.service.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-@Getter
-@Setter
-public class StudentDto {
-    private Long studentId;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class InstructorDto {
+    private Long instructorId;
 
     private String name;
 
@@ -18,5 +19,4 @@ public class StudentDto {
     private String password;
 
     private String photoPath;
-
 }

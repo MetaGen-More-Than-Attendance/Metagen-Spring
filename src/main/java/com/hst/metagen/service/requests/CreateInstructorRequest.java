@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateStudentDto {
+public class CreateInstructorRequest {
 
     @NotNull(message = "Name field is mandatory")
     private String userName;

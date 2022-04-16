@@ -1,9 +1,35 @@
 package com.hst.metagen.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import com.hst.metagen.service.abstracts.InstructorService;
+import com.hst.metagen.service.requests.CreateInstructorRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
+@RequestMapping("/api/instructor")
+@RequiredArgsConstructor
 public class InstructorController {
+
+    private final InstructorService instructorService;
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> saveInstructor(@RequestBody CreateInstructorRequest createInstructorRequest) throws IOException {
+        return ResponseEntity.ok(instructorService.save(createInstructorRequest));
+    }
+
+    @GetMapping(value = "/get")
+    public ResponseEntity<?> getInstructor(@RequestParam Long instructorId) {
+        return ResponseEntity.ok(instructorService.getInstructor(instructorId));
+    }
+
+    @PostMapping("/get-photo")
+    public byte[] getInstructorPhoto(@RequestParam Long instructorId) throws IOException {
+        byte[] a= instructorService.getInstructorPhoto(instructorId);
+        System.out.println(a.length);
+        return a;
+    }
 }

@@ -35,6 +35,7 @@ public class DbInitializer implements CommandLineRunner {
         if(roleService.getByRoleName("ADMIN_USER")==null){
             roleService.addRole("ADMIN_USER");
             roleService.addRole("TEACHER_USER");
+            roleService.addRole("STUDENT_USER");
         }
 
         if (userRepository.getUserByUserMail("admin@gmail.com")==null){
