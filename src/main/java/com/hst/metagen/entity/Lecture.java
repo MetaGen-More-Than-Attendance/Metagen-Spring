@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name="lectures")
 public class Lecture {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecture_id")
@@ -36,4 +37,16 @@ public class Lecture {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> lectureStudents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="department_id")
+    private Department department;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "lecture_semesters",
+            joinColumns = @JoinColumn(name = "lecture_id"),
+            inverseJoinColumns = @JoinColumn(name = "semester_id")
+    )
+    private List<Semester> semesters;
 }

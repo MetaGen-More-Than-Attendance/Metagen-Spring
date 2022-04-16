@@ -7,7 +7,7 @@ import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.StudentDto;
-import com.hst.metagen.service.requests.CreateStudentDto;
+import com.hst.metagen.service.requests.CreateStudentRequest;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,17 +31,17 @@ public class StudentServiceImpl implements StudentService {
     private final FileService fileService;
 
     @Override
-    public StudentDto save(CreateStudentDto studentDto) throws IOException {
+    public StudentDto save(CreateStudentRequest createStudentRequest) throws IOException {
         Role studentUser = roleService.getByRoleName("STUDENT_USER");
         Set<Role> roles = new HashSet<>();
         roles.add(studentUser);
-        Student student = modelMapperService.forRequest().map(studentDto, Student.class);
+        Student student = modelMapperService.forRequest().map(createStudentRequest, Student.class);
 
-        if (studentDto.getImageBase64()!=null){
-            student = fileService.saveFile(student,studentDto.getImageBase64());
+        if (createStudentRequest.getImageBase64()!=null){
+            student = fileService.saveFile(student,createStudentRequest.getImageBase64());
         }
 
-        student.setUserPassword(bcryptEncoder.encode(studentDto.getUserPassword()));
+        student.setUserPassword(bcryptEncoder.encode(createStudentRequest.getUserPassword()));
         student.setUserRoles(roles);
 
         return modelMapperService.forDto().map(studentRepository.save(student), StudentDto.class);
