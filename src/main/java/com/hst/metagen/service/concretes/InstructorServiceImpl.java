@@ -36,13 +36,15 @@ public class InstructorServiceImpl implements InstructorService {
         Set<Role> roles = new HashSet<>();
         roles.add(instructorUser);
         Instructor instructor = modelMapperService.forRequest().map(createInstructorRequest, Instructor.class);
+        String photoPath = "";
 
         if (createInstructorRequest.getImageBase64()!=null){
-            instructor = fileService.saveFile(instructor,createInstructorRequest.getImageBase64());
+            photoPath = fileService.saveFile(instructor,createInstructorRequest.getImageBase64());
         }
 
         instructor.setUserPassword(bcryptEncoder.encode(createInstructorRequest.getUserPassword()));
         instructor.setUserRoles(roles);
+        instructor.setPhotoPath(photoPath);
 
         return modelMapperService.forDto().map(instructorRepository.save(instructor), InstructorDto.class);
     }
