@@ -55,6 +55,24 @@ public class AuthController {
 
     }
 
+    @GetMapping("/valid")
+    public ResponseEntity<?> tokenValidate(@RequestParam String token) {
+        boolean isValid = jwtTokenManager.tokenValidate(token);
+        return ResponseEntity.ok(isValid);
+    }
+
+    @GetMapping("/isExpired")
+    public ResponseEntity<?> tokenIsExpired(@RequestParam String token) {
+        try {
+            if (token.equals("null"))
+                return ResponseEntity.ok(true);
+            if (jwtTokenManager.isExpired(token)) {
+                return ResponseEntity.ok(true);
+            } else return ResponseEntity.ok(false);
+        } catch (Exception e) {
+            return ResponseEntity.ok(true);
+        }
+    }
     @GetMapping("/get-authenticated-user")
     public ResponseEntity<UserDto> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());

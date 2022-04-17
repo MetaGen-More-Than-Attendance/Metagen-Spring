@@ -83,4 +83,13 @@ public class JwtTokenManager {
 
     }
 
+    public boolean isExpired(String token) {
+        Claims claims = getClaims(token);
+        return claims.getExpiration().after(new Date(System.currentTimeMillis()));
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
+    }
+
 }
