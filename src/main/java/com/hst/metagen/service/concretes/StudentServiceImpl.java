@@ -49,11 +49,11 @@ public class StudentServiceImpl implements StudentService {
 
         student = studentRepository.save(student);
 
-        return (StudentDto) modelMapperService.entityToDto(student, StudentDto.class);
+        return modelMapperService.entityToDto(student, StudentDto.class);
     }
 
     public StudentDto getStudent(Long studentId){
-        return modelMapperService.forDto().map(studentRepository.getById(studentId), StudentDto.class);
+        return modelMapperService.entityToDto(studentRepository.getById(studentId), StudentDto.class);
     }
 
     @Override
@@ -66,6 +66,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> getAllStudents() {
         List<Student> studentList = studentRepository.findAll();
-        return (List<StudentDto>) modelMapperService.entityToDtoList(studentList, StudentDto.class);
+        return modelMapperService.entityToDtoList(studentList, StudentDto.class);
     }
 }

@@ -32,24 +32,24 @@ public class ModelMapperManager implements ModelMapperService{
 	}
 
 	@Override
-	public List<?> dtoToEntityList(List<?> dtoList, Class<?> destinationType) {
+	public <T> List<T> dtoToEntityList(List<?> dtoList, Class<T> destinationType) {
 		return dtoList.stream()
 				.map(dto -> forRequest().map(dto, destinationType)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<?> entityToDtoList(List<?> entityList, Class<?> destinationType) {
+	public <T> List<T> entityToDtoList(List<?> entityList, Class<T> destinationType) {
 		return entityList.stream()
 				.map(entity -> forDto().map(entity, destinationType)).collect(Collectors.toList());
 	}
 
 	@Override
-	public Object dtoToEntity(Object dto, Class<?> destinationType) {
+	public <T> T dtoToEntity(Object dto, Class<T> destinationType) {
 		return forRequest().map(dto, destinationType);
 	}
 
 	@Override
-	public Object entityToDto(Object entity, Class<?> destinationType) {
+	public <T> T entityToDto(Object entity, Class<T> destinationType) {
 		return forDto().map(entity, destinationType);
 	}
 

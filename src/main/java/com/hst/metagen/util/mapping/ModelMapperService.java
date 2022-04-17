@@ -9,10 +9,10 @@ public interface ModelMapperService {
 	ModelMapper forDto();
 	ModelMapper forRequest();
 
-	List<?> dtoToEntityList(List<?> dtoList, Class<?> destinationType);
-	List<?> entityToDtoList(List<?> entityList, Class<?> destinationType);
-	Object dtoToEntity(Object dto, Class<?> destinationType);
-	Object entityToDto(Object entity, Class<?> destinationType);
+	<T> List<T> dtoToEntityList(List<?> dtoList, Class<T> destinationType);
+	<T> List<T> entityToDtoList(List<?> entityList, Class<T> destinationType);
+	<T> T dtoToEntity(Object dto, Class<T> destinationType);
+	<T> T entityToDto(Object entity, Class<T> destinationType);
 
 
 }
