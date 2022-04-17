@@ -2,7 +2,8 @@ package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Student;
-import com.hst.metagen.repository.StudentRepository;
+import com.hst.metagen.entity.User;
+import com.hst.metagen.repository.UserRepository;
 import com.hst.metagen.service.abstracts.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
+
     @Override
     public String getFileAbsolutePath(String extension, String fileBasePath,String identityNumber) throws IOException {
 
@@ -32,7 +34,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Student saveFile(Student student,String base64Image) throws IOException {
+    public String saveFile(Student student,String base64Image) throws IOException {
 
         String[] strings = base64Image.split(",");
         String extension;
@@ -57,11 +59,11 @@ public class FileServiceImpl implements FileService {
             fosFor.write(imageByte);
         }
 
-        return student;
+        return path;
     }
 
     @Override
-    public Instructor saveFile(Instructor instructor, String base64Image) throws IOException {
+    public String saveFile(Instructor instructor, String base64Image) throws IOException {
         String[] strings = base64Image.split(",");
         String extension;
         switch (strings[0]) {//check image's extension
@@ -85,13 +87,13 @@ public class FileServiceImpl implements FileService {
             fosFor.write(imageByte);
         }
 
-        return instructor;
+        return path;
     }
 
     @Override
-    public byte[] getFile(Long studentId) throws IOException {
-        Student student = studentRepository.getById(studentId);
-        Path path = Paths.get(student.getPhotoPath());
+    public byte[] getFile(Long id) throws IOException {
+        User user = userRepository.getById(Math.toIntExact(id));
+        Path path = Paths.get(user.getPhotoPath());
         return Files.readAllBytes(path);
 
     }

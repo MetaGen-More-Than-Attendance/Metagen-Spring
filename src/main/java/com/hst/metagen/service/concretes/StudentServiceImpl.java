@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -36,19 +37,23 @@ public class StudentServiceImpl implements StudentService {
         Set<Role> roles = new HashSet<>();
         roles.add(studentUser);
         Student student = modelMapperService.forRequest().map(createStudentRequest, Student.class);
+        String photoPath = "";
 
         if (createStudentRequest.getImageBase64()!=null){
-            student = fileService.saveFile(student,createStudentRequest.getImageBase64());
+            photoPath = fileService.saveFile(student,createStudentRequest.getImageBase64());
         }
 
         student.setUserPassword(bcryptEncoder.encode(createStudentRequest.getUserPassword()));
         student.setUserRoles(roles);
+        student.setPhotoPath(photoPath);
 
-        return modelMapperService.forDto().map(studentRepository.save(student), StudentDto.class);
+        student = studentRepository.save(student);
+
+        return modelMapperService.entityToDto(student, StudentDto.class);
     }
 
     public StudentDto getStudent(Long studentId){
-        return modelMapperService.forDto().map(studentRepository.getById(studentId), StudentDto.class);
+        return modelMapperService.entityToDto(studentRepository.getById(studentId), StudentDto.class);
     }
 
     @Override
@@ -56,5 +61,11 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.getById(studentId);
         Path path = Paths.get(student.getPhotoPath());
         return Files.readAllBytes(path);
+    }
+
+    @Override
+    public List<StudentDto> getAllStudents() {
+        List<Student> studentList = studentRepository.findAll();
+        return modelMapperService.entityToDtoList(studentList, StudentDto.class);
     }
 }

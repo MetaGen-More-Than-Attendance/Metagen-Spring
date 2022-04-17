@@ -20,6 +20,9 @@ public class Lecture {
     @Column(name = "lecture_id")
     private Long lectureId;
 
+    @Column(name = "lecture_name")
+    private String lectureName;
+
     @Column(name = "lecture_start_date")
     private LocalDate lectureStartDate;
 

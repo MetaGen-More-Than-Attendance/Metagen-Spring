@@ -73,5 +73,9 @@ public class AuthController {
             return ResponseEntity.ok(true);
         }
     }
+    @GetMapping("/get-authenticated-user")
+    public ResponseEntity<UserDto> getAuthenticatedUser() {
+        return ResponseEntity.ok(userService.getAuthenticatedUser());
+    }
 
 }
