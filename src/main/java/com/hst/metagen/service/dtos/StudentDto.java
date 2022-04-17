@@ -7,16 +7,21 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentDto {
+
     private Long studentId;
 
-    private String name;
+    private String userName;
 
-    private String surname;
+    private String userSurname;
 
     private String identityNumber;
 
-    private String password;
-
     private String photoPath;
+
+    private String userMail;
+
+    private String userPassword;
+
+    private String resetPasswordToken;
 
 }

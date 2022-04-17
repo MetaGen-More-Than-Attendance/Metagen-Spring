@@ -1,12 +1,14 @@
 package com.hst.metagen.controller;
 
 import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.CreateStudentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -32,5 +34,10 @@ public class StudentController {
         byte[] a= studentService.getStudentPhoto(studentId);
         System.out.println(a.length);
         return a;
+    }
+
+    @GetMapping("get-all")
+    public List<StudentDto> getAllStudents() {
+        return studentService.getAllStudents();
     }
 }
