@@ -1,11 +1,10 @@
 package com.hst.metagen.service.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StudentDto {
 
     private Long studentId;

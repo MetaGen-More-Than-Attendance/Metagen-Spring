@@ -1,4 +1,4 @@
-package com.hst.metagen.configuration;
+package com.hst.metagen.configuration.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;

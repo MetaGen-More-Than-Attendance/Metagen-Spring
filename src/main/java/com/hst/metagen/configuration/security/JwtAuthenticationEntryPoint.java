@@ -1,4 +1,4 @@
-package com.hst.metagen.configuration;
+package com.hst.metagen.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;

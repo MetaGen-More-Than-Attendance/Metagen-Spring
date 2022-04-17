@@ -1,4 +1,4 @@
-package com.hst.metagen.controller;
+package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.StudentDto;
