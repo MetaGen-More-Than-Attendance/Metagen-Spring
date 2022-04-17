@@ -1,4 +1,4 @@
-package com.hst.metagen.controller;
+package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.requests.CreateInstructorRequest;

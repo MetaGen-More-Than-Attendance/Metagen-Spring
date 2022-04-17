@@ -1,4 +1,4 @@
-package com.hst.metagen.configuration;
+package com.hst.metagen.configuration.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.BadCredentialsException;

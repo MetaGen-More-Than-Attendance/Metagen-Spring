@@ -1,6 +1,6 @@
-package com.hst.metagen.controller;
+package com.hst.metagen.api.controller;
 
-import com.hst.metagen.configuration.JwtTokenManager;
+import com.hst.metagen.configuration.security.JwtTokenManager;
 import com.hst.metagen.service.abstracts.UserService;
 import com.hst.metagen.service.dtos.AuthenticationResponse;
 import com.hst.metagen.service.dtos.UserDto;

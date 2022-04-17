@@ -1,7 +1,5 @@
-package com.hst.metagen.security;
+package com.hst.metagen.configuration.security;
 
-import com.hst.metagen.configuration.JwtAuthenticationEntryPoint;
-import com.hst.metagen.configuration.JwtTokenFilter;
 import com.hst.metagen.service.abstracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
