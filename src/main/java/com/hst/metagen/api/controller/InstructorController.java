@@ -1,12 +1,15 @@
 package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.InstructorService;
+import com.hst.metagen.service.dtos.InstructorDto;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.CreateInstructorRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -32,4 +35,10 @@ public class InstructorController {
         System.out.println(a.length);
         return a;
     }
+
+    @GetMapping("get-all")
+    public List<InstructorDto> getAllInstructor() {
+        return instructorService.getAllInstructor();
+    }
+
 }
