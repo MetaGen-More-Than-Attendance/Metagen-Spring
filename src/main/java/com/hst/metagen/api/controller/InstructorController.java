@@ -37,8 +37,8 @@ public class InstructorController {
     }
 
     @GetMapping("get-all")
-    public List<InstructorDto> getAllInstructor() {
-        return instructorService.getAllInstructor();
+    public ResponseEntity<?> getAllInstructor() {
+        return ResponseEntity.ok(instructorService.getAllInstructor());
     }
 
 }

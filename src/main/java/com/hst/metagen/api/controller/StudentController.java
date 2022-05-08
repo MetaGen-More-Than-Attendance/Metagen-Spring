@@ -37,7 +37,7 @@ public class StudentController {
     }
 
     @GetMapping("get-all")
-    public List<StudentDto> getAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<?> getAllStudents() {
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
 }

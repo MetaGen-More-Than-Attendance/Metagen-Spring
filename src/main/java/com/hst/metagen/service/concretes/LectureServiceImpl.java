@@ -27,17 +27,17 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
-        Lecture lecture = modelMapperService.forRequest().map(createLectureRequest,Lecture.class);
-        Instructor instructor = modelMapperService.forRequest().map(instructorService.getInstructor(createLectureRequest.getInstructorId()),Instructor.class);
+        Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
+        Instructor instructor = modelMapperService.forDto().map(instructorService.getInstructor(createLectureRequest.getInstructorId()),Instructor.class);
         if(instructor != null)
             lecture.setInstructor(instructor);
-        return modelMapperService.forRequest().map(lectureRepository.save(lecture),LectureDto.class);
+        return modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
     }
 
     @Override
     public LectureDto getById(Long lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
-        LectureDto lectureDto = modelMapperService.forRequest().map(lecture,LectureDto.class);
+        LectureDto lectureDto = modelMapperService.entityToDto(lecture,LectureDto.class);
         if (lecture.getInstructor() != null){
             lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());
         }
@@ -46,14 +46,14 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public List<LectureDto> getStudentLectures(Long studentId) {
-        List<LectureDto> lectureDtos = lectureRepository.findAll().stream().map(lecture -> modelMapperService.forRequest().map(lecture,LectureDto.class)).collect(Collectors.toList());
+        List<LectureDto> lectureDtos = modelMapperService.entityToDtoList(lectureRepository.findAll(),LectureDto.class);
         return lectureDtos;
     }
 
     @Override
     public List<LectureDto> getAllLectures() {
         List<LectureDto> lectureDtos = lectureRepository.findAll().stream().map(lecture -> {
-            LectureDto lectureDto =  modelMapperService.forRequest().map(lecture,LectureDto.class);
+            LectureDto lectureDto =  modelMapperService.entityToDto(lecture,LectureDto.class);
             lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());
             return lectureDto;
         }).collect(Collectors.toList());

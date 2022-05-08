@@ -22,15 +22,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto save(CreateDepartmentRequest createDepartmentRequest) {
-        Department department = modelMapperService.forRequest().map(createDepartmentRequest,Department.class);
+        Department department = modelMapperService.dtoToEntity(createDepartmentRequest,Department.class);
         return modelMapperService.forRequest().map(departmentRepository.save(department),DepartmentDto.class);
     }
 
     @Override
     public List<DepartmentDto> getAllDepartments() {
-        List<Department> departments = departmentRepository.findAll();
-        List<DepartmentDto> departmentDtos = departments.stream().map(department ->
-                modelMapperService.forRequest().map(department,DepartmentDto.class)).collect(Collectors.toList());
-        return departmentDtos;
+        List<DepartmentDto> departments = modelMapperService.entityToDtoList(departmentRepository.findAll(),DepartmentDto.class);
+        return departments;
     }
 }

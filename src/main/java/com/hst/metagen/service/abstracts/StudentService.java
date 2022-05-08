@@ -11,4 +11,5 @@ public interface StudentService {
     StudentDto getStudent(Long studentId);
     byte[] getStudentPhoto(Long studentId) throws IOException;
     List<StudentDto> getAllStudents();
+
 }
