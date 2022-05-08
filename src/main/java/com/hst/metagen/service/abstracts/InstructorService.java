@@ -11,4 +11,5 @@ public interface InstructorService {
     InstructorDto getInstructor(Long instructorId);
     byte[] getInstructorPhoto(Long instructorId) throws IOException;
     List<InstructorDto> getAllInstructor();
+    Boolean deleteInstructor(Long instructorId);
 }

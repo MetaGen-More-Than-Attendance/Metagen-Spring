@@ -36,8 +36,13 @@ public class StudentController {
         return a;
     }
 
-    @GetMapping("get-all")
+    @GetMapping("/get-all")
     public ResponseEntity<?> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteStudent(@RequestParam Long studentId) {
+        return ResponseEntity.ok(studentService.deleteStudent(studentId));
     }
 }

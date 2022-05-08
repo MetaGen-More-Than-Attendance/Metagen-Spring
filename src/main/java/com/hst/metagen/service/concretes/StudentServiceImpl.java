@@ -8,6 +8,7 @@ import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.CreateStudentRequest;
+import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,5 +68,12 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllStudents() {
         List<Student> studentList = studentRepository.findAll();
         return modelMapperService.entityToDtoList(studentList, StudentDto.class);
+    }
+
+    @Override
+    public Boolean deleteStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
+        studentRepository.delete(student);
+        return true;
     }
 }

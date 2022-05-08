@@ -36,9 +36,14 @@ public class InstructorController {
         return a;
     }
 
-    @GetMapping("get-all")
+    @GetMapping("/get-all")
     public ResponseEntity<?> getAllInstructor() {
         return ResponseEntity.ok(instructorService.getAllInstructor());
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteInstructor(@RequestParam Long instructorId) {
+        return ResponseEntity.ok(instructorService.deleteInstructor(instructorId));
     }
 
 }

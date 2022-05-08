@@ -10,6 +10,7 @@ import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.CreateInstructorRequest;
+import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,5 +69,13 @@ public class InstructorServiceImpl implements InstructorService {
     public List<InstructorDto> getAllInstructor() {
         List<Instructor> instructorList = instructorRepository.findAll();
         return modelMapperService.entityToDtoList(instructorList, InstructorDto.class);
+    }
+
+    @Override
+    public Boolean deleteInstructor(Long instructorId) {
+        //Hakan bunu silince hocanın verdiği derslerde siliniyo. CascadeType persistde ise hata veriyo silerken netçez
+        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(NotFoundException::new);
+        instructorRepository.delete(instructor);
+        return true;
     }
 }

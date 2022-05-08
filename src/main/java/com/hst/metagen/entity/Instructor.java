@@ -18,7 +18,7 @@ public class Instructor extends User {
     @Column(name="instructor_id", insertable = false, updatable = false)
     private Long instructorId;
 
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lecture> lectures;
 
 }
