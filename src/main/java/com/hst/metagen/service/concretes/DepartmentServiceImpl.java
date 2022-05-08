@@ -27,6 +27,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public DepartmentDto findById(Long departmentId) {
+        return modelMapperService.dtoToEntity(departmentRepository.findById(departmentId).orElseThrow(NotFoundException::new),DepartmentDto.class);
+    }
+
+    @Override
     public List<DepartmentDto> getAllDepartments() {
         List<DepartmentDto> departments = modelMapperService.entityToDtoList(departmentRepository.findAll(),DepartmentDto.class);
         return departments;

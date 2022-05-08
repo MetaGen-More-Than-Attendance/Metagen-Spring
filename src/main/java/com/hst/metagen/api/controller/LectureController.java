@@ -1,10 +1,13 @@
 package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.LectureService;
+import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -26,5 +29,15 @@ public class LectureController {
     @GetMapping(value = "/getAll")
     public ResponseEntity<?> getLectures() {
         return ResponseEntity.ok(lectureService.getAllLectures());
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteLecture(@RequestParam Long lectureId) {
+        return ResponseEntity.ok(lectureService.delete(lectureId));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateLecture(@RequestParam Long lectureId,@RequestBody CreateLectureRequest createLectureRequest) throws IOException {
+        return ResponseEntity.ok(lectureService.update(lectureId,createLectureRequest));
     }
 }

@@ -10,4 +10,6 @@ public interface LectureService {
     LectureDto getById(Long lectureId);
     List<LectureDto> getStudentLectures(Long studentId);
     List<LectureDto> getAllLectures();
+    LectureDto update(Long lectureId,CreateLectureRequest createLectureRequest);
+    Boolean delete(Long lectureId);
 }

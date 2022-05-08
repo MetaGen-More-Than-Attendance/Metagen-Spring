@@ -1,8 +1,10 @@
 package com.hst.metagen.service.concretes;
 
+import com.hst.metagen.entity.Department;
 import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.repository.LectureRepository;
+import com.hst.metagen.service.abstracts.DepartmentService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.dtos.LectureDto;
@@ -22,6 +24,8 @@ public class LectureServiceImpl implements LectureService {
     private final LectureRepository lectureRepository;
 
     private final InstructorService instructorService;
+
+    private final DepartmentService departmentService;
 
     private final ModelMapperService modelMapperService;
 
@@ -58,5 +62,28 @@ public class LectureServiceImpl implements LectureService {
             return lectureDto;
         }).collect(Collectors.toList());
         return lectureDtos;
+    }
+
+    @Override
+    public LectureDto update(Long lectureId,CreateLectureRequest createLectureRequest) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
+        if (createLectureRequest.getInstructorId() != null){
+            Instructor instructor = modelMapperService.dtoToEntity(instructorService.getInstructor(createLectureRequest.getInstructorId()),Instructor.class);
+            lecture.setInstructor(instructor);
+        }
+        if (createLectureRequest.getDepartmentId() != null){
+            Department department = modelMapperService.dtoToEntity(departmentService.findById(createLectureRequest.getDepartmentId()),Department.class);
+            lecture.setDepartment(department);
+        }
+        lecture.setLectureName(createLectureRequest.getLectureName());
+        lecture.setLectureStartDate(createLectureRequest.getLectureStartDate());
+        return modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
+    }
+
+    @Override
+    public Boolean delete(Long lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
+        lectureRepository.delete(lecture);
+        return true;
     }
 }

@@ -26,7 +26,7 @@ public class Lecture {
     @Column(name = "lecture_start_date")
     private LocalDate lectureStartDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="instructor_id")
     private Instructor instructor;
 
