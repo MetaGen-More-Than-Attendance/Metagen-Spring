@@ -1,7 +1,9 @@
 package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
 import com.hst.metagen.service.requests.student.CreateStudentRequest;
+import com.hst.metagen.service.requests.student.UpdateStudentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +44,10 @@ public class StudentController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteStudent(@RequestParam Long studentId) {
         return ResponseEntity.ok(studentService.deleteStudent(studentId));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateStudent(@RequestParam Long studentId,@RequestBody UpdateStudentRequest updateStudentRequest) throws IOException {
+        return ResponseEntity.ok(studentService.update(studentId,updateStudentRequest));
     }
 }

@@ -1,13 +1,16 @@
 package com.hst.metagen.service.concretes;
 
+import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Role;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.student.CreateStudentRequest;
+import com.hst.metagen.service.requests.student.UpdateStudentRequest;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +57,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public StudentDto getStudent(Long studentId){
-        return modelMapperService.entityToDto(studentRepository.getById(studentId), StudentDto.class);
+        return modelMapperService.entityToDto(studentRepository.findById(studentId).orElseThrow(NotFoundException::new), StudentDto.class);
     }
 
     @Override
@@ -75,5 +78,20 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
         studentRepository.delete(student);
         return true;
+    }
+
+    @Override
+    public StudentDto update(Long studentId,UpdateStudentRequest updateStudentRequest) throws IOException {
+        Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
+        student.setUserName(updateStudentRequest.getUserName());
+        student.setUserSurname(updateStudentRequest.getUserSurname());
+        student.setIdentityNumber(updateStudentRequest.getIdentityNumber());
+        student.setUserMail(updateStudentRequest.getUserMail());
+        String photoPath = "";
+        if (updateStudentRequest.getImageBase64() != null){
+            photoPath = fileService.saveFile(student,updateStudentRequest.getImageBase64());
+        }
+        Student savedStudent = studentRepository.save(student);
+        return modelMapperService.entityToDto(savedStudent, StudentDto.class);
     }
 }
