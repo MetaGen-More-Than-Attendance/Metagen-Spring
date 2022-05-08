@@ -8,4 +8,6 @@ import java.util.List;
 public interface DepartmentService {
     DepartmentDto save(CreateDepartmentRequest createDepartmentRequest);
     List<DepartmentDto> getAllDepartments();
+    Boolean deleteDepartments(Long id);
+    DepartmentDto update(Long id,CreateDepartmentRequest createDepartmentRequest);
 }
