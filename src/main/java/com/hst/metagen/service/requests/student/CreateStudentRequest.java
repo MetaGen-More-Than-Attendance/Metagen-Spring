@@ -1,4 +1,4 @@
-package com.hst.metagen.service.requests;
+package com.hst.metagen.service.requests.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateInstructorRequest {
+public class CreateStudentRequest {
 
     @NotNull(message = "Name field is mandatory")
     private String userName;

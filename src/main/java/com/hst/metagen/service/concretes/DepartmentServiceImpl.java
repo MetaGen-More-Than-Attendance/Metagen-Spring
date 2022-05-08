@@ -4,13 +4,12 @@ import com.hst.metagen.entity.Department;
 import com.hst.metagen.repository.DepartmentRepository;
 import com.hst.metagen.service.abstracts.DepartmentService;
 import com.hst.metagen.service.dtos.DepartmentDto;
-import com.hst.metagen.service.requests.CreateDepartmentRequest;
+import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

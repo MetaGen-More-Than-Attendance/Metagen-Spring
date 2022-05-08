@@ -1,7 +1,7 @@
 package com.hst.metagen.service.abstracts;
 
 import com.hst.metagen.service.dtos.LectureDto;
-import com.hst.metagen.service.requests.CreateLectureRequest;
+import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 
 import java.util.List;
 

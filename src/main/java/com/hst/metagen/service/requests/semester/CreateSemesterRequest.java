@@ -1,4 +1,4 @@
-package com.hst.metagen.service.requests;
+package com.hst.metagen.service.requests.semester;
 
 import com.hst.metagen.entity.SemesterEnum;
 import lombok.AllArgsConstructor;

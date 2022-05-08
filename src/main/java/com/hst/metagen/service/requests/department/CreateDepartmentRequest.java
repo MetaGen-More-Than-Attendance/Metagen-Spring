@@ -1,4 +1,4 @@
-package com.hst.metagen.service.requests;
+package com.hst.metagen.service.requests.department;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

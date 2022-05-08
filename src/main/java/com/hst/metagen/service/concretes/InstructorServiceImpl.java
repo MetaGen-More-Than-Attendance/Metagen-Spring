@@ -2,14 +2,13 @@ package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Role;
-import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.InstructorRepository;
 import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.dtos.InstructorDto;
-import com.hst.metagen.service.dtos.StudentDto;
-import com.hst.metagen.service.requests.CreateInstructorRequest;
+import com.hst.metagen.service.requests.instructor.CreateInstructorRequest;
+import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
@@ -77,5 +76,20 @@ public class InstructorServiceImpl implements InstructorService {
         Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(NotFoundException::new);
         instructorRepository.delete(instructor);
         return true;
+    }
+
+    @Override
+    public InstructorDto update(Long instructorId, UpdateInstructorRequest updateInstructorRequest) throws IOException {
+        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(NotFoundException::new);
+        instructor.setUserName(updateInstructorRequest.getUserName());
+        instructor.setUserSurname(updateInstructorRequest.getUserSurname());
+        instructor.setIdentityNumber(updateInstructorRequest.getIdentityNumber());
+        instructor.setUserMail(updateInstructorRequest.getUserMail());
+        String photoPath = "";
+        if (updateInstructorRequest.getImageBase64() != null){
+            photoPath = fileService.saveFile(instructor,updateInstructorRequest.getImageBase64());
+        }
+        Instructor savedInstructor = instructorRepository.save(instructor);
+        return modelMapperService.entityToDto(savedInstructor,InstructorDto.class);
     }
 }

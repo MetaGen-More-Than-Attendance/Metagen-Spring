@@ -1,7 +1,7 @@
 package com.hst.metagen.service.abstracts;
 
 import com.hst.metagen.service.dtos.SemesterDto;
-import com.hst.metagen.service.requests.CreateSemesterRequest;
+import com.hst.metagen.service.requests.semester.CreateSemesterRequest;
 
 import java.util.List;
 

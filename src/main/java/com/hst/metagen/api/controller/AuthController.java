@@ -4,7 +4,7 @@ import com.hst.metagen.configuration.security.JwtTokenManager;
 import com.hst.metagen.service.abstracts.UserService;
 import com.hst.metagen.service.dtos.AuthenticationResponse;
 import com.hst.metagen.service.dtos.UserDto;
-import com.hst.metagen.service.requests.AuthenticationRequest;
+import com.hst.metagen.service.requests.authentication.AuthenticationRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

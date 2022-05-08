@@ -1,15 +1,13 @@
 package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.InstructorService;
-import com.hst.metagen.service.dtos.InstructorDto;
-import com.hst.metagen.service.dtos.StudentDto;
-import com.hst.metagen.service.requests.CreateInstructorRequest;
+import com.hst.metagen.service.requests.instructor.CreateInstructorRequest;
+import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -44,6 +42,11 @@ public class InstructorController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteInstructor(@RequestParam Long instructorId) {
         return ResponseEntity.ok(instructorService.deleteInstructor(instructorId));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateInstructor(@RequestParam Long instructorId,@RequestBody UpdateInstructorRequest updateInstructorRequest) throws IOException {
+        return ResponseEntity.ok(instructorService.update(instructorId,updateInstructorRequest));
     }
 
 }

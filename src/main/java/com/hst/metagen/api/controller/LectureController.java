@@ -1,7 +1,7 @@
 package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.LectureService;
-import com.hst.metagen.service.requests.CreateLectureRequest;
+import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

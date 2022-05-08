@@ -6,7 +6,7 @@ import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.dtos.LectureDto;
-import com.hst.metagen.service.requests.CreateLectureRequest;
+import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.hst.metagen.service.abstracts;
 
 import com.hst.metagen.service.dtos.AbsenteeismDto;
-import com.hst.metagen.service.requests.CreateAbsenteeismRequest;
+import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
 
 import java.time.LocalDate;
 import java.util.List;
