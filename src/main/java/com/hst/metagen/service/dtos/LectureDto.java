@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class LectureDto {
     private Long lectureId;
+    private Long instructorId;
     private String lectureName;
     private LocalDate lectureStartDate;
     private String departmentName;

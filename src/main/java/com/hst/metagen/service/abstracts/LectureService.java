@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface LectureService {
     LectureDto save(CreateLectureRequest createLectureRequest);
+    LectureDto getById(Long lectureId);
     List<LectureDto> getStudentLectures(Long studentId);
     List<LectureDto> getAllLectures();
 }
