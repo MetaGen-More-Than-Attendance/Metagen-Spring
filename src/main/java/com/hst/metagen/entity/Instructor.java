@@ -1,16 +1,15 @@
 package com.hst.metagen.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name="instructors")
 @PrimaryKeyJoinColumn(name = "instructor_id", referencedColumnName = "user_id")
 public class Instructor extends User {

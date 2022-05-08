@@ -18,5 +18,7 @@ public class InstructorDto {
 
     private String password;
 
+    private String userMail;
+
     private String photoPath;
 }
