@@ -3,10 +3,12 @@ package com.hst.metagen.service.concretes;
 import com.hst.metagen.entity.Department;
 import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Lecture;
+import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.service.abstracts.DepartmentService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.LectureService;
+import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import com.hst.metagen.util.exception.NotFoundException;
@@ -14,6 +16,7 @@ import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +32,7 @@ public class LectureServiceImpl implements LectureService {
 
     private final ModelMapperService modelMapperService;
 
+    private final StudentService studentService;
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
         Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
@@ -85,5 +89,30 @@ public class LectureServiceImpl implements LectureService {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
         lectureRepository.delete(lecture);
         return true;
+    }
+
+    @Override
+    public LectureDto addStudent(Long lectureId, List<Long> studentIds) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
+        List<Student> studentList = studentIds.stream().map(s-> {
+            Student student = modelMapperService.dtoToEntity(studentService.getStudent(s),Student.class);
+            student.setUserId(student.getStudentId());
+            student.getStudentLectures().add(lecture);
+            return student;
+        }).collect(Collectors.toList());
+        lecture.setLectureStudents(studentList);
+        LectureDto lectureDto = modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
+        if (lecture.getInstructor().getInstructorId() != null){
+            lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());
+        }
+        List<Long> studentIdList = new ArrayList<>();
+        if (lecture.getLectureStudents() != null){
+            for (Student student : lecture.getLectureStudents()){
+                studentIdList.add(student.getStudentId());
+            }
+            lectureDto.setStudentIds(studentIdList);
+        }
+
+        return lectureDto;
     }
 }

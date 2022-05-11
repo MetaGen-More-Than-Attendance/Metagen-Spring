@@ -50,4 +50,15 @@ public class StudentController {
     public ResponseEntity<?> updateStudent(@RequestParam Long studentId,@RequestBody UpdateStudentRequest updateStudentRequest) throws IOException {
         return ResponseEntity.ok(studentService.update(studentId,updateStudentRequest));
     }
+
+    @GetMapping("/{studentId}/lecture")
+    public ResponseEntity<?> getAllLectures(@PathVariable Long studentId) {
+        return ResponseEntity.ok(studentService.getStudentLectures(studentId));
+    }
+
+    @GetMapping("/getAllByDepartment")
+    public ResponseEntity<?> getAllStudentByDepartmentId(@RequestParam Long departmentId) {
+        return ResponseEntity.ok(studentService.getAllByDepartment(departmentId));
+    }
+
 }

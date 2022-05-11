@@ -12,4 +12,5 @@ public interface LectureService {
     List<LectureDto> getAllLectures();
     LectureDto update(Long lectureId,CreateLectureRequest createLectureRequest);
     Boolean delete(Long lectureId);
+    LectureDto addStudent(Long lectureId, List<Long> studentIds);
 }

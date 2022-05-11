@@ -1,13 +1,15 @@
 package com.hst.metagen.service.concretes;
 
-import com.hst.metagen.entity.Instructor;
-import com.hst.metagen.entity.Role;
-import com.hst.metagen.entity.Student;
+import com.hst.metagen.entity.*;
+import com.hst.metagen.repository.DepartmentRepository;
+import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.FileService;
+import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.InstructorDto;
+import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.student.CreateStudentRequest;
 import com.hst.metagen.service.requests.student.UpdateStudentRequest;
@@ -21,9 +23,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +38,8 @@ public class StudentServiceImpl implements StudentService {
     private final PasswordEncoder bcryptEncoder;
     private final StudentRepository studentRepository;
     private final FileService fileService;
-
+    private final LectureRepository lectureRepository;
+    private final DepartmentRepository departmentRepository;
     @Override
     public StudentDto save(CreateStudentRequest createStudentRequest) throws IOException {
         Role studentUser = roleService.getByRoleName("STUDENT_USER");
@@ -46,13 +51,16 @@ public class StudentServiceImpl implements StudentService {
         if (createStudentRequest.getImageBase64()!=null){
             photoPath = fileService.saveFile(student,createStudentRequest.getImageBase64());
         }
+        if (createStudentRequest.getDepartmentId() != null){
+            Department department = departmentRepository.getById(createStudentRequest.getDepartmentId());
+            student.setDepartment(department);
+        }
 
         student.setUserPassword(bcryptEncoder.encode(createStudentRequest.getUserPassword()));
         student.setUserRoles(roles);
         student.setPhotoPath(photoPath);
-
         student = studentRepository.save(student);
-
+        student.setStudentId(student.getUserId());
         return modelMapperService.entityToDto(student, StudentDto.class);
     }
 
@@ -83,15 +91,38 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDto update(Long studentId,UpdateStudentRequest updateStudentRequest) throws IOException {
         Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
-        student.setUserName(updateStudentRequest.getUserName());
-        student.setUserSurname(updateStudentRequest.getUserSurname());
-        student.setIdentityNumber(updateStudentRequest.getIdentityNumber());
-        student.setUserMail(updateStudentRequest.getUserMail());
+        if (updateStudentRequest.getUserName() != null)
+            student.setUserName(updateStudentRequest.getUserName());
+        if (updateStudentRequest.getUserSurname() != null)
+            student.setUserSurname(updateStudentRequest.getUserSurname());
+        if (updateStudentRequest.getIdentityNumber() != null)
+            student.setIdentityNumber(updateStudentRequest.getIdentityNumber());
+        if (updateStudentRequest.getUserMail() != null)
+            student.setUserMail(updateStudentRequest.getUserMail());
         String photoPath = "";
         if (updateStudentRequest.getImageBase64() != null){
             photoPath = fileService.saveFile(student,updateStudentRequest.getImageBase64());
+            student.setPhotoPath(photoPath);
+        }
+        if (updateStudentRequest.getDepartmentId() != null){
+            Department department = departmentRepository.getById(updateStudentRequest.getDepartmentId());
+            student.setDepartment(department);
         }
         Student savedStudent = studentRepository.save(student);
         return modelMapperService.entityToDto(savedStudent, StudentDto.class);
+    }
+
+    @Override
+    public List<LectureDto> getStudentLectures(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
+        List<Lecture> lecture =  lectureRepository.findLecturesByLectureStudents(student);
+        return modelMapperService.entityToDtoList(lecture,LectureDto.class);
+    }
+
+    @Override
+    public List<StudentDto> getAllByDepartment(Long departmentId) {
+        Department department = departmentRepository.findById(departmentId).orElseThrow(NotFoundException::new);
+        List<StudentDto> studentDtos = modelMapperService.entityToDtoList(studentRepository.getStudentsByDepartment(department),StudentDto.class);
+        return studentDtos;
     }
 }

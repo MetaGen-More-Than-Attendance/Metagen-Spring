@@ -1,5 +1,6 @@
 package com.hst.metagen.service.abstracts;
 
+import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.student.CreateStudentRequest;
 import com.hst.metagen.service.requests.student.UpdateStudentRequest;
@@ -14,4 +15,6 @@ public interface StudentService {
     List<StudentDto> getAllStudents();
     Boolean deleteStudent(Long studentId);
     StudentDto update(Long studentId,UpdateStudentRequest updateStudentRequest) throws IOException;
+    List<LectureDto> getStudentLectures(Long studentId);
+    List<StudentDto> getAllByDepartment(Long departmentId);
 }

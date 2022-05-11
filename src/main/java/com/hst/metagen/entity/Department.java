@@ -24,4 +24,7 @@ public class Department {
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Lecture> lectures;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Student> students;
 }

@@ -19,6 +19,8 @@ public class StudentDto {
 
     private String userMail;
 
+    private Long departmentId;
+
     private String userPassword;
 
     private String resetPasswordToken;

@@ -1,10 +1,12 @@
 package com.hst.metagen.service.dtos;
 
+import com.hst.metagen.entity.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class LectureDto {
     private String lectureName;
     private LocalDate lectureStartDate;
     private String departmentName;
+    private List<Long> studentIds;
 }
