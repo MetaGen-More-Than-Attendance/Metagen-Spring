@@ -1,8 +1,10 @@
 package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.Instructor;
+import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.entity.Role;
 import com.hst.metagen.repository.InstructorRepository;
+import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.RoleService;
@@ -32,7 +34,7 @@ public class InstructorServiceImpl implements InstructorService {
     private final PasswordEncoder bcryptEncoder;
     private final InstructorRepository instructorRepository;
     private final FileService fileService;
-
+    private final LectureRepository lectureRepository;
     @Override
     public InstructorDto save(CreateInstructorRequest createInstructorRequest) throws IOException {
         Role instructorUser = roleService.getByRoleName("TEACHER_USER");
@@ -72,8 +74,17 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public Boolean deleteInstructor(Long instructorId) {
-        //Hakan bunu silince hocanın verdiği derslerde siliniyo. CascadeType persistde ise hata veriyo silerken netçez
         Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(NotFoundException::new);
+        instructor.setLectures(null);
+        List<Lecture> lectures = lectureRepository.findLecturesByInstructor(instructor);
+        if (lectures.isEmpty()){
+            instructorRepository.delete(instructor);
+            return true;
+        }
+        for (Lecture lecture : lectures){
+            lecture.setInstructor(null);
+            //lectureRepository.save(lecture);
+        }
         instructorRepository.delete(instructor);
         return true;
     }

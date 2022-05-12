@@ -84,6 +84,15 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Boolean deleteStudent(Long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
+        List<Lecture> lectureList = lectureRepository.findLecturesByLectureStudents(student);
+        if (lectureList.isEmpty()){
+            studentRepository.delete(student);
+            return true;
+        }
+        for (Lecture lecture : lectureList){
+            lecture.getLectureStudents().remove(student);
+            //lectureRepository.save(lecture);
+        }
         studentRepository.delete(student);
         return true;
     }

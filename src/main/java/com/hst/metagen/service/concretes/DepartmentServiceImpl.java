@@ -1,7 +1,11 @@
 package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.Department;
+import com.hst.metagen.entity.Lecture;
+import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.DepartmentRepository;
+import com.hst.metagen.repository.LectureRepository;
+import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.DepartmentService;
 import com.hst.metagen.service.dtos.DepartmentDto;
 import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
@@ -20,6 +24,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final ModelMapperService modelMapperService;
 
+    private final StudentRepository studentRepository;
+
+    private final LectureRepository lectureRepository;
     @Override
     public DepartmentDto save(CreateDepartmentRequest createDepartmentRequest) {
         Department department = modelMapperService.dtoToEntity(createDepartmentRequest,Department.class);
