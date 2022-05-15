@@ -1,9 +1,21 @@
 package com.hst.metagen.api.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import com.hst.metagen.service.abstracts.AbsenteeismService;
+import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
+@RequestMapping("/api/absenteeism")
 public class AbsenteeismController {
+
+    private final AbsenteeismService absenteeismService;
+
+    @PostMapping(value = "/createDefaultAbseenteism")
+    public ResponseEntity<?> createDefaultAbseenteism(@RequestBody CreateDepartmentRequest createDepartmentRequest) {
+        return null;
+    }
 }

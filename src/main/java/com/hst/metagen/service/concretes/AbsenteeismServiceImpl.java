@@ -3,10 +3,12 @@ package com.hst.metagen.service.concretes;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.dtos.AbsenteeismDto;
 import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class AbsenteeismServiceImpl implements AbsenteeismService {
     @Override
     public AbsenteeismDto save(CreateAbsenteeismRequest createAbsenteeismRequest) {

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +64,9 @@ public class LectureServiceImpl implements LectureService {
     public List<LectureDto> getAllLectures() {
         List<LectureDto> lectureDtos = lectureRepository.findAll().stream().map(lecture -> {
             LectureDto lectureDto =  modelMapperService.entityToDto(lecture,LectureDto.class);
-            lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());
+            if (Objects.nonNull(lecture.getInstructor())){
+                lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());
+            }
             return lectureDto;
         }).collect(Collectors.toList());
         return lectureDtos;
