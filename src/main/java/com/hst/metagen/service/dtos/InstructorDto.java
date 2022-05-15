@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class InstructorDto {
     private Long instructorId;
 
-    private String name;
+    private String userName;
 
-    private String surname;
+    private String userSurname;
 
     private String identityNumber;
 
