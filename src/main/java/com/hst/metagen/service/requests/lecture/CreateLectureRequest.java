@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreateLectureRequest {
 
-    private Long lectureId;
     private String lectureName;
     private LocalDate lectureStartDate;
     private Long instructorId;

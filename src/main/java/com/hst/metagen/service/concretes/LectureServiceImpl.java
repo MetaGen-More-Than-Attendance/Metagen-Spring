@@ -36,9 +36,10 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
         Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
-        Instructor instructor = modelMapperService.forDto().map(instructorService.getInstructor(createLectureRequest.getInstructorId()),Instructor.class);
-        if(instructor != null)
-            lecture.setInstructor(instructor);
+        Instructor instructor = instructorService.getInstructorEntity(createLectureRequest.getInstructorId());
+        Department department = departmentService.getDepartmentEntity(createLectureRequest.getDepartmentId());
+        lecture.setInstructor(instructor);
+        lecture.setDepartment(department);
         return modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
     }
 

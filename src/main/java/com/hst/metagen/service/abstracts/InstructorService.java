@@ -1,5 +1,6 @@
 package com.hst.metagen.service.abstracts;
 
+import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.requests.instructor.CreateInstructorRequest;
 import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
@@ -14,4 +15,5 @@ public interface InstructorService {
     List<InstructorDto> getAllInstructor();
     Boolean deleteInstructor(Long instructorId);
     InstructorDto update(Long instructorId, UpdateInstructorRequest updateInstructorRequest) throws IOException;
+    Instructor getInstructorEntity(Long instructorId);
 }
