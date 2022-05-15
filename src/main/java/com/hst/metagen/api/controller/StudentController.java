@@ -29,7 +29,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudent(studentId));
     }
 
-    @PostMapping("/get-photo")
+    @GetMapping("/get-photo")
     public byte[] getStudentPhoto(@RequestParam Long studentId) throws IOException {
         byte[] a= studentService.getStudentPhoto(studentId);
         System.out.println(a.length);
