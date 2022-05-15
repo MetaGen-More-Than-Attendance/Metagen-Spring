@@ -58,4 +58,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentDto departmentDto = modelMapperService.entityToDto(departmentRepository.save(department),DepartmentDto.class);
         return departmentDto;
     }
+
+    @Override
+    public Department getDepartmentEntity(Long departmentId) {
+        return departmentRepository.getById(departmentId);
+    }
 }

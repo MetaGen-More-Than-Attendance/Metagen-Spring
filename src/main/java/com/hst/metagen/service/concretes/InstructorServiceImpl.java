@@ -103,4 +103,9 @@ public class InstructorServiceImpl implements InstructorService {
         Instructor savedInstructor = instructorRepository.save(instructor);
         return modelMapperService.entityToDto(savedInstructor,InstructorDto.class);
     }
+
+    @Override
+    public Instructor getInstructorEntity(Long instructorId) {
+        return instructorRepository.getById(instructorId);
+    }
 }

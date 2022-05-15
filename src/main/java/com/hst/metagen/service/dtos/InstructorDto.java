@@ -16,7 +16,7 @@ public class InstructorDto {
 
     private String identityNumber;
 
-    private String password;
+    private String userPassword;
 
     private String userMail;
 

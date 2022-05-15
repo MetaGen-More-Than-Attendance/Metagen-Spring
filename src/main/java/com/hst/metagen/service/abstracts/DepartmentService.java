@@ -1,5 +1,6 @@
 package com.hst.metagen.service.abstracts;
 
+import com.hst.metagen.entity.Department;
 import com.hst.metagen.service.dtos.DepartmentDto;
 import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 
@@ -11,4 +12,5 @@ public interface DepartmentService {
     List<DepartmentDto> getAllDepartments();
     Boolean deleteDepartments(Long id);
     DepartmentDto update(Long id,CreateDepartmentRequest createDepartmentRequest);
+    Department getDepartmentEntity(Long departmentId);
 }
