@@ -14,6 +14,7 @@ import java.util.List;
 public class LectureDto {
     private Long lectureId;
     private Long instructorId;
+    private String instructorName;
     private String lectureName;
     private LocalDate lectureStartDate;
     private String departmentName;
