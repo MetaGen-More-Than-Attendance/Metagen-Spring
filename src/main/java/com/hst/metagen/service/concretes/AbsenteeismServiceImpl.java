@@ -30,8 +30,8 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     public void save(CreateAbsenteeismRequest createAbsenteeismRequest) {
         Lecture lecture = lectureService.getLectureEntity(createAbsenteeismRequest.getLectureId());
         Semester semester = semesterService.getLastSemester();
-
-        for (LocalDate startDate = createAbsenteeismRequest.getAbsenteeismDate() ; startDate.isBefore(semester.getEndDate()); startDate.plusDays(7)) {
+        LocalDate startDate = createAbsenteeismRequest.getAbsenteeismDate();
+        while (startDate.isBefore(semester.getEndDate())) {
             List<Student> students = lecture.getLectureStudents();
             for (Student student : students) {
                 Absenteeism absenteeism = Absenteeism.builder()
@@ -41,6 +41,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                         .student(student).build();
                 absenteeismRepository.save(absenteeism);
             }
+            startDate = startDate.plusDays(7);
         }
     }
 

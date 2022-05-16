@@ -13,7 +13,7 @@ import java.time.Year;
 @NoArgsConstructor
 public class CreateSemesterRequest {
 
-    String semester;
+    String semesterName;
     LocalDate startDate;
     LocalDate endDate;
 
