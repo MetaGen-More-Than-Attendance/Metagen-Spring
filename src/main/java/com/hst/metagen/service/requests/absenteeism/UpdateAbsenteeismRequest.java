@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateAbsenteeismRequest {
+public class UpdateAbsenteeismRequest {
 
     private LocalDate absenteeismDate;
+    private boolean absenteeism;
     private Long lectureId;
-
+    private Long studentId;
 }
-

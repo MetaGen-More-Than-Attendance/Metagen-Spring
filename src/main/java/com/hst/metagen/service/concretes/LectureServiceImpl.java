@@ -119,4 +119,9 @@ public class LectureServiceImpl implements LectureService {
 
         return lectureDto;
     }
+
+    @Override
+    public Lecture getLectureEntity(Long lectureId) {
+        return lectureRepository.getById(lectureId);
+    }
 }

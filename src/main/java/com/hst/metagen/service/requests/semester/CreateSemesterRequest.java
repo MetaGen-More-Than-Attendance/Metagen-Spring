@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.Year;
 
 @Data
@@ -12,8 +13,8 @@ import java.time.Year;
 @NoArgsConstructor
 public class CreateSemesterRequest {
 
-    SemesterEnum semester;
-    Year startYear;
-    Year endYear;
+    String semester;
+    LocalDate startDate;
+    LocalDate endDate;
 
 }
