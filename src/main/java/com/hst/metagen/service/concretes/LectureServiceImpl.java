@@ -124,4 +124,11 @@ public class LectureServiceImpl implements LectureService {
     public Lecture getLectureEntity(Long lectureId) {
         return lectureRepository.getById(lectureId);
     }
+
+    @Override
+    public List<LectureDto> getInstructorLectures(Long instructorId) {
+        List<Lecture> lectures = lectureRepository.findLecturesByInstructor_InstructorId(instructorId);
+        return modelMapperService.entityToDtoList(lectures,LectureDto.class);
+
+    }
 }

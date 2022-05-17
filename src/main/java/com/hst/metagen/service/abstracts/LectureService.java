@@ -15,4 +15,5 @@ public interface LectureService {
     Boolean delete(Long lectureId);
     LectureDto addStudent(Long lectureId, List<Long> studentIds);
     Lecture getLectureEntity(Long lectureId);
+    List<LectureDto> getInstructorLectures(Long instructorId);
 }

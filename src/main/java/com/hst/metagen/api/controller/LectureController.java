@@ -47,4 +47,9 @@ public class LectureController {
         return ResponseEntity.ok(lectureService.addStudent(lectureId,studentIds));
     }
 
+    @GetMapping("/getInstructorLectures")
+    public ResponseEntity<?> getLecturesByInstructorId(@RequestParam Long instructorId) throws IOException {
+        return ResponseEntity.ok(lectureService.getInstructorLectures(instructorId));
+    }
+
 }
