@@ -20,5 +20,7 @@ public class InstructorDto {
 
     private String userMail;
 
+    private String photo;
+
     private String photoPath;
 }

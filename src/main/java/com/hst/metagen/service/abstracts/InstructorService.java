@@ -16,4 +16,5 @@ public interface InstructorService {
     Boolean deleteInstructor(Long instructorId);
     InstructorDto update(Long instructorId, UpdateInstructorRequest updateInstructorRequest) throws IOException;
     Instructor getInstructorEntity(Long instructorId);
+    String getInstructorPhotoBase64(Long instructorId) throws IOException;
 }

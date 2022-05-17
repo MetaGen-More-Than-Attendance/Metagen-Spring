@@ -17,13 +17,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -62,13 +61,25 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public byte[] getInstructorPhoto(Long instructorId) throws IOException {
         Instructor instructor = instructorRepository.getById(instructorId);
-        Path path = Paths.get(instructor.getPhotoPath());
-        return Files.readAllBytes(path);
+        try{
+            Path path = Paths.get(instructor.getPhotoPath());
+            return Files.readAllBytes(path);
+        } catch (IOException e){
+            return null;
+        }
     }
 
     @Override
     public List<InstructorDto> getAllInstructor() {
         List<Instructor> instructorList = instructorRepository.findAll();
+        List<InstructorDto> instructorDtoList = modelMapperService.entityToDtoList(instructorList, InstructorDto.class);
+        instructorDtoList.forEach(instructorDto -> {
+            try {
+                instructorDto.setPhoto(getInstructorPhotoBase64(instructorDto.getInstructorId()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return modelMapperService.entityToDtoList(instructorList, InstructorDto.class);
     }
 
@@ -107,5 +118,14 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public Instructor getInstructorEntity(Long instructorId) {
         return instructorRepository.getById(instructorId);
+    }
+
+    @Override
+    public String getInstructorPhotoBase64(Long instructorId) throws IOException {
+        byte[] imageBytes = getInstructorPhoto(instructorId);
+        if (Objects.isNull(imageBytes)){
+            return null;
+        }
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 }

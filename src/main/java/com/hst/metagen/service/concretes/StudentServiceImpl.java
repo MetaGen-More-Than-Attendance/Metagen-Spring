@@ -78,7 +78,7 @@ public class StudentServiceImpl implements StudentService {
         try {
             Path path = Paths.get(student.getPhotoPath());
             return Files.readAllBytes(path);
-        }catch (NoSuchFileException e){
+        } catch (IOException e){
             return null;
         }
     }
