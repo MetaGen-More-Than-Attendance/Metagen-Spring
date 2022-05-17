@@ -71,7 +71,16 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
 
     @Override
     public List<AbsenteeismDto> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
-        return null;
+        return modelMapperService.entityToDtoList(
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
+                AbsenteeismDto.class);
+    }
+
+    @Override
+    public List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId) {
+        return modelMapperService.entityToDtoList(
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdOrderByAbsenteeismDate(lectureId),
+                AbsenteeismDto.class);
     }
 
     @Override
