@@ -2,6 +2,7 @@ package com.hst.metagen.api.controller;
 
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
+import com.hst.metagen.service.requests.absenteeism.UpdateAbsenteeismRequest;
 import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,4 +22,21 @@ public class AbsenteeismController {
         absenteeismService.save(createAbsenteeismRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping(value = "/updateAbseenteism")
+    public ResponseEntity<?> updateAbseenteism(@RequestBody UpdateAbsenteeismRequest updateAbsenteeismRequest) {
+        return ResponseEntity.ok(absenteeismService.update(updateAbsenteeismRequest));
+    }
+
+    @GetMapping(value = "/getAllAbseenteism")
+    public ResponseEntity<?> getAllAbseenteism(@RequestParam Long lectureId,@RequestParam Long studentId) {
+        return ResponseEntity.ok(absenteeismService.getStudentAndLectureAbsenteeisms(studentId,lectureId));
+    }
+
+    @DeleteMapping(value = "/deleteAllAbseenteism")
+    public ResponseEntity<?> deleteAll() {
+        absenteeismService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

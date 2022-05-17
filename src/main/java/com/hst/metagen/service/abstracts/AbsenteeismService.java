@@ -12,4 +12,5 @@ public interface AbsenteeismService {
     AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest);
     List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId);
     List<AbsenteeismDto> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);
+    void deleteAll();
 }
