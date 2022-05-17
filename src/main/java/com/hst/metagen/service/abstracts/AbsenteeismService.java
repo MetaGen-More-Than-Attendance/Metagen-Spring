@@ -10,8 +10,8 @@ import java.util.List;
 public interface AbsenteeismService {
     void save(CreateAbsenteeismRequest createAbsenteeismRequest);
     AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest);
-    List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId);
+    List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId);
     List<AbsenteeismDto> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);
-    List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId);
+    List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId, Long semesterId);
     void deleteAll();
 }

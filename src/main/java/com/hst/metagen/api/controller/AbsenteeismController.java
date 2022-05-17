@@ -31,8 +31,8 @@ public class AbsenteeismController {
     }
 
     @GetMapping(value = "/getAbseenteismByStudentIdAndLectureId")
-    public ResponseEntity<?> getAbseenteismByStudentIdAndLectureId(@RequestParam Long lectureId,@RequestParam Long studentId) {
-        return ResponseEntity.ok(absenteeismService.getStudentAndLectureAbsenteeisms(studentId,lectureId));
+    public ResponseEntity<?> getAbseenteismByStudentIdAndLectureId(@RequestParam Long lectureId,@RequestParam Long studentId, Long semesterId) {
+        return ResponseEntity.ok(absenteeismService.getStudentAndLectureAbsenteeisms(studentId,lectureId, semesterId));
     }
 
     @GetMapping(value = "/getAbseenteismLectureIdandAbsenteeismDate")
@@ -41,8 +41,8 @@ public class AbsenteeismController {
     }
 
     @GetMapping(value = "/getAbseenteismByLectureId")
-    public ResponseEntity<?> getLectureAbsenteesims(@RequestParam Long lectureId) {
-        return ResponseEntity.ok(absenteeismService.getLectureAbsenteesims(lectureId));
+    public ResponseEntity<?> getLectureAbsenteesims(@RequestParam Long lectureId, Long semesterId) {
+        return ResponseEntity.ok(absenteeismService.getLectureAbsenteesims(lectureId, semesterId));
     }
 
     @DeleteMapping(value = "/deleteAllAbseenteism")
