@@ -11,12 +11,14 @@ import com.hst.metagen.service.abstracts.SemesterService;
 import com.hst.metagen.service.dtos.AbsenteeismDto;
 import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
 import com.hst.metagen.service.requests.absenteeism.UpdateAbsenteeismRequest;
+import com.hst.metagen.util.exception.AbsenteeismNotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +54,9 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 updateAbsenteeismRequest.getLectureId(),
                 updateAbsenteeismRequest.getStudentId()
         );
-
+        if (Objects.isNull(absenteeism)){
+            throw new AbsenteeismNotFoundException("Absenteeism is not found");
+        }
         absenteeism.setAbsenteeism(updateAbsenteeismRequest.isAbsenteeism());
 
         return modelMapperService.entityToDto(absenteeismRepository.save(absenteeism), AbsenteeismDto.class);
@@ -61,7 +65,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     @Override
     public List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId) {
         return modelMapperService.entityToDtoList(
-                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentId(lectureId,studentId),
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdOrderByAbsenteeismDate(lectureId,studentId),
                 AbsenteeismDto.class);
     }
 
