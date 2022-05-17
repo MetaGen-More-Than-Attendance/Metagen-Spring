@@ -10,4 +10,5 @@ public interface SemesterService {
     SemesterDto save(CreateSemesterRequest createSemesterRequest);
     List<SemesterDto> getAllSemesters();
     Semester getLastSemester();
+    Semester getBySemesterId(Long id);
 }

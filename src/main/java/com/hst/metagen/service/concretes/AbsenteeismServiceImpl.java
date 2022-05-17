@@ -63,9 +63,10 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
-    public List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId) {
+    public List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId) {
+        Semester semester = semesterService.getBySemesterId(semesterId);
         return modelMapperService.entityToDtoList(
-                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdOrderByAbsenteeismDate(lectureId,studentId),
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
     }
 
@@ -77,9 +78,10 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
-    public List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId) {
+    public List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId, Long semesterId) {
+        Semester semester = semesterService.getBySemesterId(semesterId);
         return modelMapperService.entityToDtoList(
-                absenteeismRepository.getAbsenteeismByLecture_LectureIdOrderByAbsenteeismDate(lectureId),
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
     }
 

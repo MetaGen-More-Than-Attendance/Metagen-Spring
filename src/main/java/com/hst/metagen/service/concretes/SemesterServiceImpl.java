@@ -40,4 +40,9 @@ public class SemesterServiceImpl implements SemesterService {
         }
         return null;
     }
+
+    @Override
+    public Semester getBySemesterId(Long id) {
+        return semesterRepository.getBySemesterId(id);
+    }
 }
