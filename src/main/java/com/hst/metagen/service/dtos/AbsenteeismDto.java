@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AbsenteeismDto {
     private Long absenteeismId;
+    private Long student;
     private boolean absenteeism;
     private LocalDate absenteeismDate;
     private String lectureName;

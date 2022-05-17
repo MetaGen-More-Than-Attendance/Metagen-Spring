@@ -28,8 +28,8 @@ public class AbsenteeismController {
         return ResponseEntity.ok(absenteeismService.update(updateAbsenteeismRequest));
     }
 
-    @GetMapping(value = "/getAllAbseenteism")
-    public ResponseEntity<?> getAllAbseenteism(@RequestParam Long lectureId,@RequestParam Long studentId) {
+    @GetMapping(value = "/getAbseenteismByStudentIdAndLectureId")
+    public ResponseEntity<?> getAbseenteismByStudentIdAndLectureId(@RequestParam Long lectureId,@RequestParam Long studentId) {
         return ResponseEntity.ok(absenteeismService.getStudentAndLectureAbsenteeisms(studentId,lectureId));
     }
 
