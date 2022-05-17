@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -74,8 +75,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public byte[] getStudentPhoto(Long studentId) throws IOException {
         Student student = studentRepository.getById(studentId);
-        Path path = Paths.get(student.getPhotoPath());
-        return Files.readAllBytes(path);
+        try {
+            Path path = Paths.get(student.getPhotoPath());
+            return Files.readAllBytes(path);
+        }catch (NoSuchFileException e){
+            return null;
+        }
     }
 
     @Override
@@ -156,6 +161,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public String getStudentPhotoBase64(Long studentId) throws IOException {
         byte[] imageBytes = getStudentPhoto(studentId);
+        if (Objects.isNull(imageBytes)){
+            return null;
+        }
         return Base64.getEncoder().encodeToString(imageBytes);
     }
 }
