@@ -17,6 +17,8 @@ public class StudentDto {
 
     private String photoPath;
 
+    private String photo;
+
     private String userMail;
 
     private Long departmentId;

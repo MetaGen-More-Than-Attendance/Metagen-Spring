@@ -23,10 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -65,7 +62,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public StudentDto getStudent(Long studentId){
-        return modelMapperService.entityToDto(studentRepository.findById(studentId).orElseThrow(NotFoundException::new), StudentDto.class);
+        StudentDto studentDto = modelMapperService.entityToDto(studentRepository.findById(studentId).orElseThrow(NotFoundException::new), StudentDto.class);
+        try {
+            studentDto.setPhoto(getStudentPhotoBase64(studentId));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return studentDto;
     }
 
     @Override
@@ -78,7 +81,15 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> getAllStudents() {
         List<Student> studentList = studentRepository.findAll();
-        return modelMapperService.entityToDtoList(studentList, StudentDto.class);
+        List<StudentDto> studentDtos = modelMapperService.entityToDtoList(studentList, StudentDto.class);
+        studentDtos.forEach(studentDto -> {
+            try {
+                studentDto.setPhoto(getStudentPhotoBase64(studentDto.getStudentId()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return studentDtos;
     }
 
     @Override
@@ -132,6 +143,19 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllByDepartment(Long departmentId) {
         Department department = departmentRepository.findById(departmentId).orElseThrow(NotFoundException::new);
         List<StudentDto> studentDtos = modelMapperService.entityToDtoList(studentRepository.getStudentsByDepartment(department),StudentDto.class);
+        studentDtos.forEach(studentDto -> {
+            try {
+                studentDto.setPhoto(getStudentPhotoBase64(studentDto.getStudentId()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return studentDtos;
+    }
+
+    @Override
+    public String getStudentPhotoBase64(Long studentId) throws IOException {
+        byte[] imageBytes = getStudentPhoto(studentId);
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 }

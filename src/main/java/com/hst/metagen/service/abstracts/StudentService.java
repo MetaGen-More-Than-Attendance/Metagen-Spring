@@ -17,4 +17,5 @@ public interface StudentService {
     StudentDto update(Long studentId,UpdateStudentRequest updateStudentRequest) throws IOException;
     List<LectureDto> getStudentLectures(Long studentId);
     List<StudentDto> getAllByDepartment(Long departmentId);
+    String getStudentPhotoBase64(Long studentId) throws IOException;
 }
