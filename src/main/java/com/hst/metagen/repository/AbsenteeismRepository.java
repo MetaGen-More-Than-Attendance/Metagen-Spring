@@ -17,4 +17,7 @@ public interface AbsenteeismRepository extends JpaRepository<Absenteeism,Long> {
     List<Absenteeism> getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(Long lectureId, LocalDate absenteeismDate);
 
     List<Absenteeism> getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(Long lectureId, LocalDate startDate, LocalDate endDate);
+
+    List<Absenteeism> getAbsenteeismByStudent_StudentId(Long studentId);
+
 }

@@ -104,7 +104,13 @@ public class LectureServiceImpl implements LectureService {
             student.getStudentLectures().add(lecture);
             return student;
         }).collect(Collectors.toList());
-        lecture.setLectureStudents(studentList);
+
+        if (lecture.getLectureStudents() != null) {
+            lecture.getLectureStudents().addAll(studentList);
+        } else {
+            lecture.setLectureStudents(studentList);
+        }
+
         LectureDto lectureDto = modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
         if (lecture.getInstructor().getInstructorId() != null){
             lectureDto.setInstructorId(lecture.getInstructor().getInstructorId());

@@ -1,13 +1,11 @@
 package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.*;
+import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.repository.DepartmentRepository;
 import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.repository.StudentRepository;
-import com.hst.metagen.service.abstracts.FileService;
-import com.hst.metagen.service.abstracts.LectureService;
-import com.hst.metagen.service.abstracts.RoleService;
-import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.abstracts.*;
 import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.dtos.StudentDto;
@@ -37,6 +35,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final FileService fileService;
     private final LectureRepository lectureRepository;
+    private final AbsenteeismRepository absenteeismRepository;
     private final DepartmentRepository departmentRepository;
     @Override
     public StudentDto save(CreateStudentRequest createStudentRequest) throws IOException {
@@ -100,6 +99,18 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Boolean deleteStudent(Long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow(NotFoundException::new);
+
+        List<Absenteeism> absenteeisms = absenteeismRepository.getAbsenteeismByStudent_StudentId(studentId);
+
+        if (absenteeisms.isEmpty()){
+            studentRepository.delete(student);
+            return true;
+        }
+        for (Absenteeism absenteeism : absenteeisms){
+            absenteeism.setStudent(null);
+            //lectureRepository.save(lecture);
+        }
+
         List<Lecture> lectureList = lectureRepository.findLecturesByLectureStudents(student);
         if (lectureList.isEmpty()){
             studentRepository.delete(student);
