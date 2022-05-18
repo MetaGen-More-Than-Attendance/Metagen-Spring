@@ -1,8 +1,10 @@
 package com.hst.metagen.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
+import com.hst.metagen.service.requests.student.AddStudentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +45,8 @@ public class LectureController {
     }
 
     @PostMapping("/addStudent")
-    public ResponseEntity<?> addStudent(@RequestParam Long lectureId,@RequestBody List<Long> studentIds) throws IOException {
-        return ResponseEntity.ok(lectureService.addStudent(lectureId,studentIds));
+    public ResponseEntity<?> addStudent(@RequestParam Long lectureId, @RequestBody AddStudentDto addStudentDto) throws IOException {
+        return ResponseEntity.ok(lectureService.addStudent(lectureId,addStudentDto.getStudentIds()));
     }
 
     @GetMapping("/getInstructorLectures")
