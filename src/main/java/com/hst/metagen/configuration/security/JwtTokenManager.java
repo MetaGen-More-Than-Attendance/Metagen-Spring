@@ -24,12 +24,18 @@ public class JwtTokenManager {
 
         if (roles.contains(new SimpleGrantedAuthority("ADMIN_USER"))) {
             claims.put("isAdmin", true);
+            claims.put("isTeacher", false);
+            claims.put("isStudent", false);
         }
         if (roles.contains(new SimpleGrantedAuthority("TEACHER_USER"))) {
             claims.put("isTeacher", true);
+            claims.put("isAdmin", false);
+            claims.put("isStudent", false);
         }
         if (roles.contains(new SimpleGrantedAuthority("STUDENT_USER"))) {
             claims.put("isStudent", true);
+            claims.put("isAdmin", false);
+            claims.put("isTeacher", false);
         }
 
         return doGenerateToken(claims, userDetails.getUsername());
