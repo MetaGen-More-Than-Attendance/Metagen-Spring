@@ -97,7 +97,9 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public LectureDto addStudent(Long lectureId, List<Long> studentIds) {
+
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
+
         List<Student> studentList = studentIds.stream().map(s-> {
             Student student = modelMapperService.dtoToEntity(studentService.getStudent(s),Student.class);
             student.setUserId(student.getStudentId());
