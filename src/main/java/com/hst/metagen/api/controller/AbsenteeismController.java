@@ -36,7 +36,8 @@ public class AbsenteeismController {
     }
 
     @GetMapping(value = "/getAbseenteismLectureIdandAbsenteeismDate")
-    public ResponseEntity<?> getLectureAbsenteesimsOnDate(@RequestParam Long lectureId,@RequestParam LocalDate localDate) {
+    public ResponseEntity<?> getLectureAbsenteesimsOnDate(@RequestParam Long lectureId,@RequestParam String localDateString) {
+        LocalDate localDate = LocalDate.parse(localDateString);
         return ResponseEntity.ok(absenteeismService.getLectureAbsenteesimsOnDate(lectureId, localDate));
     }
 
