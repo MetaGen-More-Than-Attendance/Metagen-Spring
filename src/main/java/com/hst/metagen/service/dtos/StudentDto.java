@@ -23,6 +23,8 @@ public class StudentDto {
 
     private Long departmentId;
 
+    private String departmentName;
+
     private String userPassword;
 
     private String resetPasswordToken;
