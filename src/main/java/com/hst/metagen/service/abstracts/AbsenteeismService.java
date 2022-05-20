@@ -6,12 +6,13 @@ import com.hst.metagen.service.requests.absenteeism.UpdateAbsenteeismRequest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface AbsenteeismService {
     void save(CreateAbsenteeismRequest createAbsenteeismRequest);
     AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest);
-    List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId);
-    List<AbsenteeismDto> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);
-    List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId, Long semesterId);
+    Map<Object, Object> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId);
+    Map<Object, Object> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);
+    Map<Object, Object> getLectureAbsenteesims(Long lectureId, Long semesterId);
     void deleteAll();
 }

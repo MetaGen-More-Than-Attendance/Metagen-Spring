@@ -17,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,30 +62,67 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
-    public List<AbsenteeismDto> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId) {
+    public Map<Object, Object> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId) {
         Semester semester = semesterService.getBySemesterId(semesterId);
-        return modelMapperService.entityToDtoList(
+        List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
+
+        Map<Object, Object> map = convertToMap(absenteeismDtoList);
+
+        return map;
     }
 
     @Override
-    public List<AbsenteeismDto> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
-        return modelMapperService.entityToDtoList(
+    public Map<Object, Object> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
+        List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
+
+        Map<Object, Object> map = convertToMap(absenteeismDtoList);
+
+        return map;
     }
 
     @Override
-    public List<AbsenteeismDto> getLectureAbsenteesims(Long lectureId, Long semesterId) {
+    public Map<Object, Object> getLectureAbsenteesims(Long lectureId, Long semesterId) {
         Semester semester = semesterService.getBySemesterId(semesterId);
-        return modelMapperService.entityToDtoList(
+        List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
+
+        Map<Object, Object> map = convertToMap(absenteeismDtoList);
+
+        return map;
     }
 
     @Override
     public void deleteAll() {
         absenteeismRepository.deleteAll();
+    }
+
+    private Map<Object, Object> convertToMap(List<AbsenteeismDto> absenteeismDtoList) {
+        Map<Object, Object> map = new LinkedHashMap<>();
+        LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
+
+        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+            dates.add(absenteeismDto.getAbsenteeismDate());
+        }
+
+        dates.forEach(date -> map.put(date, new LinkedHashMap<>()));
+
+
+        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+            LinkedHashMap<String, Boolean> absenteeismMap = (LinkedHashMap<String, Boolean>) map.get(absenteeismDto.getAbsenteeismDate());
+            String name = getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname());
+            absenteeismMap.put(name, absenteeismDto.isAbsenteeism());
+            map.put(absenteeismDto.getAbsenteeismDate(), absenteeismMap);
+        }
+
+        return map;
+    }
+
+    private String getName(String name, String surname) {
+        return name + " " + surname;
     }
 }
