@@ -12,6 +12,6 @@ import java.util.LinkedList;
 @NoArgsConstructor
 public class AbsenteeismResponse {
 
-    LinkedList<AbsenteeismDate> absenteisms;
-    LinkedHashSet<String> students;
+    LinkedList<Object> head;
+    LinkedList<LinkedList<Object>> body;
 }

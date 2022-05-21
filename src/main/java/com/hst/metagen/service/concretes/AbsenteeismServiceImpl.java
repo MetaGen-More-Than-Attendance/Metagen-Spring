@@ -82,7 +82,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
 
-        return convertToResponse(absenteeismDtoList);
+        return convertTo2DArray(absenteeismDtoList);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
 
-        return convertToResponse(absenteeismDtoList);
+        return convertTo2DArray(absenteeismDtoList);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
 
         return map;
     }
-
+/*
     private AbsenteeismResponse convertToResponse(List<AbsenteeismDto> absenteeismDtoList) {
 
         AbsenteeismResponse absenteeismResponse = new AbsenteeismResponse();
@@ -150,6 +150,40 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         absenteeismResponse.setStudents(students);
 
         return absenteeismResponse;
+    }*/
+
+    private AbsenteeismResponse convertTo2DArray(List<AbsenteeismDto> absenteeismDtoList) {
+
+        LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
+        LinkedHashSet<String> students = new LinkedHashSet<>();
+
+        LinkedList<Object> head = new LinkedList<>();
+        LinkedList<LinkedList<Object>> body = new LinkedList<>();
+
+        head.add("Name-Surname");
+
+        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+            dates.add(absenteeismDto.getAbsenteeismDate());
+            students.add(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()));
+        }
+
+        head.addAll(dates);
+
+            for (String student : students) {
+                LinkedList<Object> row = new LinkedList<>();
+                row.add(student);
+
+                for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+                    if (student.equalsIgnoreCase(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()))) {
+                        row.add(absenteeismDto.isAbsenteeism());
+                    }
+                }
+
+                body.add(row);
+            }
+
+
+        return new AbsenteeismResponse(head, body);
     }
 
     private String getName(String name, String surname) {
