@@ -8,7 +8,10 @@ import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.SemesterService;
+import com.hst.metagen.service.dtos.AbsenteeismDate;
 import com.hst.metagen.service.dtos.AbsenteeismDto;
+import com.hst.metagen.service.dtos.AbsenteeismResponse;
+import com.hst.metagen.service.dtos.AbsenteeismStudent;
 import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
 import com.hst.metagen.service.requests.absenteeism.UpdateAbsenteeismRequest;
 import com.hst.metagen.util.exception.AbsenteeismNotFoundException;
@@ -74,26 +77,22 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
-    public Map<Object, Object> getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
+    public AbsenteeismResponse getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
 
-        Map<Object, Object> map = convertToMap(absenteeismDtoList);
-
-        return map;
+        return convertToResponse(absenteeismDtoList);
     }
 
     @Override
-    public Map<Object, Object> getLectureAbsenteesims(Long lectureId, Long semesterId) {
+    public AbsenteeismResponse getLectureAbsenteesims(Long lectureId, Long semesterId) {
         Semester semester = semesterService.getBySemesterId(semesterId);
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
 
-        Map<Object, Object> map = convertToMap(absenteeismDtoList);
-
-        return map;
+        return convertToResponse(absenteeismDtoList);
     }
 
     @Override
@@ -120,6 +119,37 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         }
 
         return map;
+    }
+
+    private AbsenteeismResponse convertToResponse(List<AbsenteeismDto> absenteeismDtoList) {
+
+        AbsenteeismResponse absenteeismResponse = new AbsenteeismResponse();
+
+        LinkedList<LocalDate> dates = new LinkedList<>();
+        LinkedList<AbsenteeismDate> absenteeismDates = new LinkedList<>();
+        LinkedHashSet<String> students = new LinkedHashSet<>();
+
+        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+            dates.add(absenteeismDto.getAbsenteeismDate());
+            students.add(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()));
+        }
+
+        for (LocalDate localDate : dates) {
+            LinkedList<AbsenteeismStudent> absenteeismStudents = new LinkedList<>();
+
+            for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+                if (localDate.isEqual(absenteeismDto.getAbsenteeismDate())) {
+                    absenteeismStudents.add(new AbsenteeismStudent(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()), absenteeismDto.isAbsenteeism()));
+                }
+            }
+
+            absenteeismDates.add(new AbsenteeismDate(localDate,absenteeismStudents));
+        }
+
+        absenteeismResponse.setAbsenteisms(absenteeismDates);
+        absenteeismResponse.setStudents(students);
+
+        return absenteeismResponse;
     }
 
     private String getName(String name, String surname) {
