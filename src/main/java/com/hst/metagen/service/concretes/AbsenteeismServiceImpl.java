@@ -125,7 +125,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
 
         AbsenteeismResponse absenteeismResponse = new AbsenteeismResponse();
 
-        LinkedList<LocalDate> dates = new LinkedList<>();
+        LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
         LinkedList<AbsenteeismDate> absenteeismDates = new LinkedList<>();
         LinkedHashSet<String> students = new LinkedHashSet<>();
 
