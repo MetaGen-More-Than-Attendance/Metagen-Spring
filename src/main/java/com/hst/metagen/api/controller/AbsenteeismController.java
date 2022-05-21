@@ -46,6 +46,11 @@ public class AbsenteeismController {
         return ResponseEntity.ok(absenteeismService.getLectureAbsenteesims(lectureId, semesterId));
     }
 
+    @GetMapping(value = "/getStudentAbseenteisms")
+    public ResponseEntity<?> getStudentAbseenteisms(@RequestParam Long lectureId,@RequestParam Long studentId,@RequestParam Long semesterId) {
+        return ResponseEntity.ok(absenteeismService.getStudentAbsenteeisms(studentId,lectureId, semesterId));
+    }
+
     @DeleteMapping(value = "/deleteAllAbseenteism")
     public ResponseEntity<?> deleteAll() {
         absenteeismService.deleteAll();

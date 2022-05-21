@@ -8,10 +8,8 @@ import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.SemesterService;
-import com.hst.metagen.service.dtos.AbsenteeismDate;
 import com.hst.metagen.service.dtos.AbsenteeismDto;
 import com.hst.metagen.service.dtos.AbsenteeismResponse;
-import com.hst.metagen.service.dtos.AbsenteeismStudent;
 import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
 import com.hst.metagen.service.requests.absenteeism.UpdateAbsenteeismRequest;
 import com.hst.metagen.util.exception.AbsenteeismNotFoundException;
@@ -77,12 +75,22 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
+    public AbsenteeismResponse getStudentAbsenteeisms(Long studentId, Long lectureId, Long semesterId) {
+        Semester semester = semesterService.getBySemesterId(semesterId);
+        List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
+                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
+                AbsenteeismDto.class);
+
+        return convertToResponseForStudent(absenteeismDtoList);
+    }
+
+    @Override
     public AbsenteeismResponse getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate) {
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
 
-        return convertTo2DArray(absenteeismDtoList);
+        return convertToResponse(absenteeismDtoList);
     }
 
     @Override
@@ -92,7 +100,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
 
-        return convertTo2DArray(absenteeismDtoList);
+        return convertToResponse(absenteeismDtoList);
     }
 
     @Override
@@ -120,39 +128,8 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
 
         return map;
     }
-/*
+
     private AbsenteeismResponse convertToResponse(List<AbsenteeismDto> absenteeismDtoList) {
-
-        AbsenteeismResponse absenteeismResponse = new AbsenteeismResponse();
-
-        LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
-        LinkedList<AbsenteeismDate> absenteeismDates = new LinkedList<>();
-        LinkedHashSet<String> students = new LinkedHashSet<>();
-
-        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
-            dates.add(absenteeismDto.getAbsenteeismDate());
-            students.add(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()));
-        }
-
-        for (LocalDate localDate : dates) {
-            LinkedList<AbsenteeismStudent> absenteeismStudents = new LinkedList<>();
-
-            for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
-                if (localDate.isEqual(absenteeismDto.getAbsenteeismDate())) {
-                    absenteeismStudents.add(new AbsenteeismStudent(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()), absenteeismDto.isAbsenteeism()));
-                }
-            }
-
-            absenteeismDates.add(new AbsenteeismDate(localDate,absenteeismStudents));
-        }
-
-        absenteeismResponse.setAbsenteisms(absenteeismDates);
-        absenteeismResponse.setStudents(students);
-
-        return absenteeismResponse;
-    }*/
-
-    private AbsenteeismResponse convertTo2DArray(List<AbsenteeismDto> absenteeismDtoList) {
 
         LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
         LinkedHashSet<String> students = new LinkedHashSet<>();
@@ -181,6 +158,37 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
 
                 body.add(row);
             }
+
+
+        return new AbsenteeismResponse(head, body);
+    }
+
+    private AbsenteeismResponse convertToResponseForStudent(List<AbsenteeismDto> absenteeismDtoList) {
+
+        LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
+
+        LinkedList<Object> head = new LinkedList<>();
+        LinkedList<LinkedList<Object>> body = new LinkedList<>();
+
+        head.add("Date");
+        head.add("Attendance");
+
+        for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+            dates.add(absenteeismDto.getAbsenteeismDate());
+        }
+
+        for (LocalDate date : dates) {
+            LinkedList<Object> row = new LinkedList<>();
+            row.add(date);
+
+            for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+                if (date.isEqual(absenteeismDto.getAbsenteeismDate())) {
+                    row.add(absenteeismDto.isAbsenteeism());
+                }
+            }
+
+            body.add(row);
+        }
 
 
         return new AbsenteeismResponse(head, body);

@@ -13,6 +13,7 @@ public interface AbsenteeismService {
     void save(CreateAbsenteeismRequest createAbsenteeismRequest);
     AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest);
     Map<Object, Object> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId, Long semesterId);
+    AbsenteeismResponse getStudentAbsenteeisms(Long studentId, Long lectureId, Long semesterId);
     AbsenteeismResponse getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);
     AbsenteeismResponse getLectureAbsenteesims(Long lectureId, Long semesterId);
     void deleteAll();
