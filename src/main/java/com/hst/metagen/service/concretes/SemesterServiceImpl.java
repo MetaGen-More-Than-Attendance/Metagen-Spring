@@ -22,6 +22,11 @@ public class SemesterServiceImpl implements SemesterService {
     @Override
     public SemesterDto save(CreateSemesterRequest createSemesterRequest) {
         Semester semester = modelMapperService.dtoToEntity(createSemesterRequest, Semester.class);
+        String startYear = Integer.toString(semester.getStartDate().getYear());
+        String endYear = Integer.toString(semester.getEndDate().getYear());
+        String semesterName = String.format("%s-%s %s", startYear, endYear, semester.getSemesterName());
+        semester.setSemesterName(semesterName);
+
         return modelMapperService.entityToDto(semesterRepository.save(semester), SemesterDto.class);
     }
 
