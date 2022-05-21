@@ -2,6 +2,7 @@ package com.hst.metagen.service.abstracts;
 
 import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.service.dtos.LectureDto;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface LectureService {
     LectureDto addStudent(Long lectureId, List<Long> studentIds);
     Lecture getLectureEntity(Long lectureId);
     List<LectureDto> getInstructorLectures(Long instructorId);
+    List<StudentDto> getLectureStudents(Long lectureId);
 }

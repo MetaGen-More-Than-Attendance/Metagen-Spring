@@ -2,6 +2,7 @@ package com.hst.metagen.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hst.metagen.service.abstracts.LectureService;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.department.CreateDepartmentRequest;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import com.hst.metagen.service.requests.student.AddStudentDto;
@@ -52,6 +53,11 @@ public class LectureController {
     @GetMapping("/getInstructorLectures")
     public ResponseEntity<?> getLecturesByInstructorId(@RequestParam Long instructorId) throws IOException {
         return ResponseEntity.ok(lectureService.getInstructorLectures(instructorId));
+    }
+
+    @GetMapping("/getLectureStudents")
+    public ResponseEntity<?> getLectureStudents(Long lectureId) {
+        return ResponseEntity.ok(lectureService.getLectureStudents(lectureId));
     }
 
 }

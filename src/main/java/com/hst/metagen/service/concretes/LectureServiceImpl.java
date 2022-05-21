@@ -10,6 +10,7 @@ import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.StudentService;
 import com.hst.metagen.service.dtos.LectureDto;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
@@ -138,5 +139,12 @@ public class LectureServiceImpl implements LectureService {
         List<Lecture> lectures = lectureRepository.findLecturesByInstructor_InstructorId(instructorId);
         return modelMapperService.entityToDtoList(lectures,LectureDto.class);
 
+    }
+
+    @Override
+    public List<StudentDto> getLectureStudents(Long lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
+        List<Student> students = lecture.getLectureStudents();
+        return modelMapperService.entityToDtoList(students,StudentDto.class);
     }
 }
