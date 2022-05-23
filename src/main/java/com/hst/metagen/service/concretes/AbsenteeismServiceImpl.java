@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +70,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
-
+        absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
         Map<Object, Object> map = convertToMap(absenteeismDtoList);
 
         return map;
@@ -80,6 +82,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
+        absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
         return convertToResponseForStudent(absenteeismDtoList);
     }
@@ -99,6 +102,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
+        absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
         return convertToResponse(absenteeismDtoList);
     }
