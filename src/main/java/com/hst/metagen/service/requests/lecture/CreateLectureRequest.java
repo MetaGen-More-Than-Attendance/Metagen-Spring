@@ -15,5 +15,6 @@ public class CreateLectureRequest {
     private LocalDate lectureStartDate;
     private Long instructorId;
     private Long departmentId;
+    private String description;
 
 }

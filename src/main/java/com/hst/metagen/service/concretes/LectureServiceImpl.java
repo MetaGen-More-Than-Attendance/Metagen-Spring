@@ -86,6 +86,7 @@ public class LectureServiceImpl implements LectureService {
         }
         lecture.setLectureName(createLectureRequest.getLectureName());
         lecture.setLectureStartDate(createLectureRequest.getLectureStartDate());
+        lecture.setDescription(createLectureRequest.getDescription());
         return modelMapperService.entityToDto(lectureRepository.save(lecture),LectureDto.class);
     }
 

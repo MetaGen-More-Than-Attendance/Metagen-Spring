@@ -31,6 +31,9 @@ public class Lecture {
     @JoinColumn(name="instructor_id")
     private Instructor instructor;
 
+    @Column(name = "lecture_description")
+    private String description;
+
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Absenteeism> absenteeisms;
 

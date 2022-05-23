@@ -19,5 +19,6 @@ public class LectureDto {
     private String lectureName;
     private LocalDate lectureStartDate;
     private String departmentName;
+    private String description;
     private List<Long> studentIds;
 }
