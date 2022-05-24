@@ -5,6 +5,7 @@ import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.entity.Semester;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.AbsenteeismRepository;
+import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.SemesterService;
@@ -27,12 +28,12 @@ import java.util.stream.Collectors;
 public class AbsenteeismServiceImpl implements AbsenteeismService {
 
     private final AbsenteeismRepository absenteeismRepository;
-    private final LectureService lectureService;
     private final SemesterService semesterService;
     private final ModelMapperService modelMapperService;
+    private final LectureRepository lectureRepository;
     @Override
     public void save(CreateAbsenteeismRequest createAbsenteeismRequest) {
-        Lecture lecture = lectureService.getLectureEntity(createAbsenteeismRequest.getLectureId());
+        Lecture lecture = lectureRepository.getById(createAbsenteeismRequest.getLectureId());
         Semester semester = semesterService.getLastSemester();
         LocalDate startDate = createAbsenteeismRequest.getAbsenteeismDate();
         while (startDate.isBefore(semester.getEndDate())) {
