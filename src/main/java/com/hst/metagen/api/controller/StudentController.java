@@ -32,7 +32,6 @@ public class StudentController {
     @GetMapping("/get-photo")
     public byte[] getStudentPhoto(@RequestParam Long studentId) throws IOException {
         byte[] a= studentService.getStudentPhoto(studentId);
-        System.out.println(a.length);
         return a;
     }
 

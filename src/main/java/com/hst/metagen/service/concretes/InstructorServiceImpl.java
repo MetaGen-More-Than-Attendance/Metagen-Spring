@@ -80,7 +80,7 @@ public class InstructorServiceImpl implements InstructorService {
                 throw new RuntimeException(e);
             }
         });
-        return modelMapperService.entityToDtoList(instructorList, InstructorDto.class);
+        return instructorDtoList;
     }
 
     @Override

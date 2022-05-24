@@ -30,7 +30,6 @@ public class InstructorController {
     @PostMapping("/get-photo")
     public byte[] getInstructorPhoto(@RequestParam Long instructorId) throws IOException {
         byte[] a= instructorService.getInstructorPhoto(instructorId);
-        System.out.println(a.length);
         return a;
     }
 
