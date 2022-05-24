@@ -5,12 +5,10 @@ import com.hst.metagen.entity.Instructor;
 import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.LectureRepository;
-import com.hst.metagen.service.abstracts.DepartmentService;
-import com.hst.metagen.service.abstracts.InstructorService;
-import com.hst.metagen.service.abstracts.LectureService;
-import com.hst.metagen.service.abstracts.StudentService;
+import com.hst.metagen.service.abstracts.*;
 import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.dtos.StudentDto;
+import com.hst.metagen.service.requests.absenteeism.CreateAbsenteeismRequest;
 import com.hst.metagen.service.requests.lecture.CreateLectureRequest;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
@@ -35,6 +33,8 @@ public class LectureServiceImpl implements LectureService {
     private final ModelMapperService modelMapperService;
 
     private final StudentService studentService;
+
+    private final AbsenteeismService absenteeismService;
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
         Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
@@ -126,7 +126,8 @@ public class LectureServiceImpl implements LectureService {
             }
             lectureDto.setStudentIds(studentIdList);
         }
-
+        CreateAbsenteeismRequest createAbsenteeismRequest = new CreateAbsenteeismRequest(lecture.getLectureStartDate(),lectureId);
+        absenteeismService.save(createAbsenteeismRequest);
         return lectureDto;
     }
 

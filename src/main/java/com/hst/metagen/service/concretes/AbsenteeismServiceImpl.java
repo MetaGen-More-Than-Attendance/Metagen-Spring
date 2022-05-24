@@ -38,6 +38,10 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         while (startDate.isBefore(semester.getEndDate())) {
             List<Student> students = lecture.getLectureStudents();
             for (Student student : students) {
+                boolean hasAlreadyAbsenteeism = absenteeismRepository.existsAbsenteeismByStudent_StudentIdAndLecture_LectureId(student.getStudentId(),lecture.getLectureId());
+                if (Boolean.TRUE.equals(hasAlreadyAbsenteeism)){
+                    continue;
+                }
                 Absenteeism absenteeism = Absenteeism.builder()
                         .absenteeism(false)
                         .absenteeismDate(startDate)
