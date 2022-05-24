@@ -1,6 +1,7 @@
 package com.hst.metagen.repository;
 
 import com.hst.metagen.entity.Absenteeism;
+import com.hst.metagen.entity.Lecture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,9 @@ public interface AbsenteeismRepository extends JpaRepository<Absenteeism,Long> {
 
     List<Absenteeism> getAbsenteeismByStudent_StudentId(Long studentId);
 
+    List<Absenteeism> findAbsenteeismsByLecture_LectureId(Long lectureId);
+
     boolean existsAbsenteeismByStudent_StudentIdAndLecture_LectureId(Long studentId,Long lectureId);
+
+    void deleteAllByLecture(Lecture lecture);
 }

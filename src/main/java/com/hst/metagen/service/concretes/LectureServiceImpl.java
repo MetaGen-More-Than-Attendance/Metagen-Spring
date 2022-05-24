@@ -1,9 +1,7 @@
 package com.hst.metagen.service.concretes;
 
-import com.hst.metagen.entity.Department;
-import com.hst.metagen.entity.Instructor;
-import com.hst.metagen.entity.Lecture;
-import com.hst.metagen.entity.Student;
+import com.hst.metagen.entity.*;
+import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.repository.LectureRepository;
 import com.hst.metagen.service.abstracts.*;
 import com.hst.metagen.service.dtos.LectureDto;
@@ -35,6 +33,8 @@ public class LectureServiceImpl implements LectureService {
     private final StudentService studentService;
 
     private final AbsenteeismService absenteeismService;
+
+    private final AbsenteeismRepository absenteeismRepository;
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
         Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
