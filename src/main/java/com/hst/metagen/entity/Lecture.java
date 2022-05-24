@@ -35,7 +35,7 @@ public class Lecture {
     private Instructor instructor;
 
     @Column(name = "lecture_attendance_percentage")
-    private Integer lectureAttendancePercentage;
+    private Integer lectureAttendancePercentage = 30;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Absenteeism> absenteeisms;
