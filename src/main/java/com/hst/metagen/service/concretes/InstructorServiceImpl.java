@@ -9,6 +9,7 @@ import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.RoleService;
 import com.hst.metagen.service.dtos.InstructorDto;
+import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.instructor.CreateInstructorRequest;
 import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
 import com.hst.metagen.util.exception.NotFoundException;
@@ -55,7 +56,13 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public InstructorDto getInstructor(Long instructorId) {
-        return modelMapperService.forDto().map(instructorRepository.getById(instructorId), InstructorDto.class);
+        InstructorDto instructorDto = modelMapperService.entityToDto(instructorRepository.getById(instructorId), InstructorDto.class);
+        try {
+            instructorDto.setPhoto(getInstructorPhotoBase64(instructorId));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return instructorDto;
     }
 
     @Override
