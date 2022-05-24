@@ -16,5 +16,6 @@ public class CreateLectureRequest {
     private Long instructorId;
     private Long departmentId;
     private String description;
+    private Integer lectureAttendancePercentage;
 
 }

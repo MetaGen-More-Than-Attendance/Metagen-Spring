@@ -27,12 +27,15 @@ public class Lecture {
     @Column(name = "lecture_start_date")
     private LocalDate lectureStartDate;
 
+    @Column(name = "lecture_description")
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="instructor_id")
     private Instructor instructor;
 
-    @Column(name = "lecture_description")
-    private String description;
+    @Column(name = "lecture_attendance_percentage")
+    private Integer lectureAttendancePercentage;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Absenteeism> absenteeisms;

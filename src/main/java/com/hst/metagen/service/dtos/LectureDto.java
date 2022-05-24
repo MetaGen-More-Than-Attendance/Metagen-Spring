@@ -20,5 +20,6 @@ public class LectureDto {
     private LocalDate lectureStartDate;
     private String departmentName;
     private String description;
+    private Integer lectureAttendancePercentage;
     private List<Long> studentIds;
 }

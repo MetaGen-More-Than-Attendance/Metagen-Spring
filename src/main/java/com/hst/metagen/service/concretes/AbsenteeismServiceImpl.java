@@ -89,7 +89,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 AbsenteeismDto.class);
         absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
-        return convertToResponseForStudent(absenteeismDtoList);
+        return convertToResponseForStudent(lectureId, absenteeismDtoList);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
 
-        return convertToResponse(absenteeismDtoList);
+        return convertToResponse(lectureId, absenteeismDtoList);
     }
 
     @Override
@@ -109,7 +109,17 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 AbsenteeismDto.class);
         absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
-        return convertToResponse(absenteeismDtoList);
+        return convertToResponse(lectureId, absenteeismDtoList);
+    }
+
+    public String getAttendanceInfo(Long lectureId, int count, int disConCount) {
+        Integer percentage = lectureRepository.getById(lectureId).getLectureAttendancePercentage();
+
+        boolean continuous = ((disConCount / count) * 100) < percentage;
+        if (continuous) {
+            return "Continuous";
+        }
+        return "Discontinuous";
     }
 
     @Override
@@ -138,7 +148,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         return map;
     }
 
-    private AbsenteeismResponse convertToResponse(List<AbsenteeismDto> absenteeismDtoList) {
+    private AbsenteeismResponse convertToResponse(Long lectureId, List<AbsenteeismDto> absenteeismDtoList) {
 
         LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
         LinkedHashSet<String> students = new LinkedHashSet<>();
@@ -154,30 +164,41 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         }
 
         head.addAll(dates);
+        head.add("Attendance");
 
-            for (String student : students) {
-                LinkedList<Object> row = new LinkedList<>();
-                row.add(student);
+        for (String student : students) {
+            LinkedList<Object> row = new LinkedList<>();
+            row.add(student);
 
-                for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
-                    if (student.equalsIgnoreCase(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()))) {
-                        row.add(absenteeismDto.isAbsenteeism());
+            int count = 0;
+            int disConCount = 0;
+            for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
+                if (student.equalsIgnoreCase(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()))) {
+                    row.add(absenteeismDto.isAbsenteeism());
+                    count++;
+                    if (!absenteeismDto.isAbsenteeism()) {
+                        disConCount++;
                     }
                 }
-
-                body.add(row);
             }
+
+            row.add(getAttendanceInfo(lectureId, count, disConCount));
+
+            body.add(row);
+        }
 
 
         return new AbsenteeismResponse(head, body);
     }
 
-    private AbsenteeismResponse convertToResponseForStudent(List<AbsenteeismDto> absenteeismDtoList) {
+    private AbsenteeismResponse convertToResponseForStudent(Long lectureId, List<AbsenteeismDto> absenteeismDtoList) {
 
         LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
 
         LinkedList<Object> head = new LinkedList<>();
         LinkedList<LinkedList<Object>> body = new LinkedList<>();
+        int count = 0;
+        int disConCount = 0;
 
         head.add("Date");
         head.add("Attendance");
@@ -193,11 +214,20 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
             for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
                 if (date.isEqual(absenteeismDto.getAbsenteeismDate())) {
                     row.add(absenteeismDto.isAbsenteeism());
+                    count++;
+                    if (!absenteeismDto.isAbsenteeism()) {
+                        disConCount++;
+                    }
                 }
             }
 
             body.add(row);
         }
+
+        LinkedList<Object> row = new LinkedList<>();
+        row.add("Attendance");
+        row.add(getAttendanceInfo(lectureId, count, disConCount));
+        body.add(row);
 
 
         return new AbsenteeismResponse(head, body);
