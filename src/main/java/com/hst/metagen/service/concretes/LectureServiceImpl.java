@@ -34,7 +34,6 @@ public class LectureServiceImpl implements LectureService {
 
     private final AbsenteeismService absenteeismService;
 
-    private final AbsenteeismRepository absenteeismRepository;
     @Override
     public LectureDto save(CreateLectureRequest createLectureRequest) {
         Lecture lecture = modelMapperService.dtoToEntity(createLectureRequest,Lecture.class);
