@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface AbsenteeismService {
     void save(CreateAbsenteeismRequest createAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException;
-    AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest);
+    AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException;
     Map<Object, Object> getStudentAndLectureAbsenteeisms(Long studentId, Long lectureId);
     AbsenteeismResponse getStudentAbsenteeisms(Long studentId, Long lectureId);
     AbsenteeismResponse getLectureAbsenteesimsOnDate(Long lectureId, LocalDate localDate);

@@ -6,6 +6,7 @@ import com.hst.metagen.entity.Semester;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.repository.LectureRepository;
+import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.abstracts.LectureService;
 import com.hst.metagen.service.abstracts.MailSenderService;
@@ -37,6 +38,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     private final ModelMapperService modelMapperService;
     private final LectureRepository lectureRepository;
     private final MailSenderService mailSenderService;
+    private final StudentRepository studentRepository;
     @Override
     public void save(CreateAbsenteeismRequest createAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         Lecture lecture = lectureRepository.getById(createAbsenteeismRequest.getLectureId());
@@ -49,22 +51,19 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 if (Boolean.TRUE.equals(hasAlreadyAbsenteeism)){
                     continue;
                 }
-                String mail = student.getUserMail();
-                String lectureName = lecture.getLectureName();
                 Absenteeism absenteeism = Absenteeism.builder()
                         .absenteeism(false)
                         .absenteeismDate(startDate)
                         .lecture(lecture)
                         .student(student).build();
                 absenteeismRepository.save(absenteeism);
-                mailSenderService.sendInfoEmail(mail, DISCONTINUOUS, lectureName);
             }
             startDate = startDate.plusDays(7);
         }
     }
 
     @Override
-    public AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest) {
+    public AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         Absenteeism absenteeism = absenteeismRepository.getByAbsenteeismDateAndLecture_LectureIdAndStudent_StudentId(
                 updateAbsenteeismRequest.getAbsenteeismDate(),
                 updateAbsenteeismRequest.getLectureId(),
@@ -73,8 +72,13 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         if (Objects.isNull(absenteeism)){
             throw new AbsenteeismNotFoundException("Absenteeism is not found");
         }
+        Student student = studentRepository.getById(updateAbsenteeismRequest.getStudentId());
+        Lecture lecture = lectureRepository.getById(updateAbsenteeismRequest.getLectureId());
         absenteeism.setAbsenteeism(updateAbsenteeismRequest.isAbsenteeism());
 
+        String mail = student.getUserMail();
+        String lectureName = lecture.getLectureName();
+        //mailSenderService.sendInfoEmail(mail, DISCONTINUOUS, lectureName);
         return modelMapperService.entityToDto(absenteeismRepository.save(absenteeism), AbsenteeismDto.class);
     }
 

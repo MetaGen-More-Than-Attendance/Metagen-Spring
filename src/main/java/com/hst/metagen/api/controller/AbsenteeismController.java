@@ -28,7 +28,7 @@ public class AbsenteeismController {
     }
 
     @PutMapping(value = "/updateAbseenteism")
-    public ResponseEntity<?> updateAbseenteism(@RequestBody UpdateAbsenteeismRequest updateAbsenteeismRequest) {
+    public ResponseEntity<?> updateAbseenteism(@RequestBody UpdateAbsenteeismRequest updateAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(absenteeismService.update(updateAbsenteeismRequest));
     }
 
