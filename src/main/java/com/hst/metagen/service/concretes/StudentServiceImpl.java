@@ -1,16 +1,14 @@
 package com.hst.metagen.service.concretes;
 
 import com.hst.metagen.entity.*;
-import com.hst.metagen.repository.AbsenteeismRepository;
-import com.hst.metagen.repository.DepartmentRepository;
-import com.hst.metagen.repository.LectureRepository;
-import com.hst.metagen.repository.StudentRepository;
+import com.hst.metagen.repository.*;
 import com.hst.metagen.service.abstracts.*;
 import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.dtos.LectureDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.student.CreateStudentRequest;
 import com.hst.metagen.service.requests.student.UpdateStudentRequest;
+import com.hst.metagen.util.exception.AlreadyExistsException;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +35,11 @@ public class StudentServiceImpl implements StudentService {
     private final LectureRepository lectureRepository;
     private final AbsenteeismRepository absenteeismRepository;
     private final DepartmentRepository departmentRepository;
+    private final UserRepository userRepository;
     @Override
     public StudentDto save(CreateStudentRequest createStudentRequest) throws IOException {
         Role studentUser = roleService.getByRoleName("STUDENT_USER");
+        checkIsExistEmail(createStudentRequest.getUserMail());
         Set<Role> roles = new HashSet<>();
         roles.add(studentUser);
         Student student = modelMapperService.forRequest().map(createStudentRequest, Student.class);
@@ -176,5 +176,11 @@ public class StudentServiceImpl implements StudentService {
             return null;
         }
         return Base64.getEncoder().encodeToString(imageBytes);
+    }
+
+    private void checkIsExistEmail(String email){
+        if (Boolean.TRUE.equals(userRepository.existsByUserMail(email))){
+            throw new AlreadyExistsException();
+        }
     }
 }

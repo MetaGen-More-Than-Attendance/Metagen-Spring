@@ -5,6 +5,7 @@ import com.hst.metagen.entity.Lecture;
 import com.hst.metagen.entity.Role;
 import com.hst.metagen.repository.InstructorRepository;
 import com.hst.metagen.repository.LectureRepository;
+import com.hst.metagen.repository.UserRepository;
 import com.hst.metagen.service.abstracts.FileService;
 import com.hst.metagen.service.abstracts.InstructorService;
 import com.hst.metagen.service.abstracts.RoleService;
@@ -12,6 +13,7 @@ import com.hst.metagen.service.dtos.InstructorDto;
 import com.hst.metagen.service.dtos.StudentDto;
 import com.hst.metagen.service.requests.instructor.CreateInstructorRequest;
 import com.hst.metagen.service.requests.instructor.UpdateInstructorRequest;
+import com.hst.metagen.util.exception.AlreadyExistsException;
 import com.hst.metagen.util.exception.NotFoundException;
 import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +37,11 @@ public class InstructorServiceImpl implements InstructorService {
     private final InstructorRepository instructorRepository;
     private final FileService fileService;
     private final LectureRepository lectureRepository;
+    private final UserRepository userRepository;
     @Override
     public InstructorDto save(CreateInstructorRequest createInstructorRequest) throws IOException {
         Role instructorUser = roleService.getByRoleName("TEACHER_USER");
+        checkIsExistEmail(createInstructorRequest.getUserMail());
         Set<Role> roles = new HashSet<>();
         roles.add(instructorUser);
         Instructor instructor = modelMapperService.forRequest().map(createInstructorRequest, Instructor.class);
@@ -134,5 +138,11 @@ public class InstructorServiceImpl implements InstructorService {
             return null;
         }
         return Base64.getEncoder().encodeToString(imageBytes);
+    }
+
+    private void checkIsExistEmail(String email){
+        if (Boolean.TRUE.equals(userRepository.existsByUserMail(email))){
+            throw new AlreadyExistsException();
+        }
     }
 }
