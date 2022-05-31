@@ -13,6 +13,8 @@ import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -97,7 +99,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public LectureDto addStudent(Long lectureId, List<Long> studentIds) {
+    public LectureDto addStudent(Long lectureId, List<Long> studentIds) throws MessagingException, UnsupportedEncodingException {
 
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(NotFoundException::new);
 

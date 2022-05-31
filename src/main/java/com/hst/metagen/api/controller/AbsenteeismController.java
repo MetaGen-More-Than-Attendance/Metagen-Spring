@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 
 @RestController
@@ -20,13 +22,13 @@ public class AbsenteeismController {
     private final AbsenteeismService absenteeismService;
 
     @PostMapping(value = "/createDefaultAbseenteism")
-    public ResponseEntity<?> createDefaultAbseenteism(@RequestBody CreateAbsenteeismRequest createAbsenteeismRequest) {
+    public ResponseEntity<?> createDefaultAbseenteism(@RequestBody CreateAbsenteeismRequest createAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         absenteeismService.save(createAbsenteeismRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/updateAbseenteism")
-    public ResponseEntity<?> updateAbseenteism(@RequestBody UpdateAbsenteeismRequest updateAbsenteeismRequest) {
+    public ResponseEntity<?> updateAbseenteism(@RequestBody UpdateAbsenteeismRequest updateAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(absenteeismService.update(updateAbsenteeismRequest));
     }
 

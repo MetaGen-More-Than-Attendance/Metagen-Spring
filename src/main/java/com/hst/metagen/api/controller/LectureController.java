@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class LectureController {
     }
 
     @PostMapping("/addStudent")
-    public ResponseEntity<?> addStudent(@RequestParam Long lectureId, @RequestBody AddStudentDto addStudentDto) throws IOException {
+    public ResponseEntity<?> addStudent(@RequestParam Long lectureId, @RequestBody AddStudentDto addStudentDto) throws IOException, MessagingException {
         return ResponseEntity.ok(lectureService.addStudent(lectureId,addStudentDto.getStudentIds()));
     }
 

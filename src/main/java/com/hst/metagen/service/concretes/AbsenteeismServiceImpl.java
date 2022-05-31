@@ -6,8 +6,10 @@ import com.hst.metagen.entity.Semester;
 import com.hst.metagen.entity.Student;
 import com.hst.metagen.repository.AbsenteeismRepository;
 import com.hst.metagen.repository.LectureRepository;
+import com.hst.metagen.repository.StudentRepository;
 import com.hst.metagen.service.abstracts.AbsenteeismService;
 import com.hst.metagen.service.abstracts.LectureService;
+import com.hst.metagen.service.abstracts.MailSenderService;
 import com.hst.metagen.service.abstracts.SemesterService;
 import com.hst.metagen.service.dtos.AbsenteeismDto;
 import com.hst.metagen.service.dtos.AbsenteeismResponse;
@@ -18,10 +20,14 @@ import com.hst.metagen.util.mapping.ModelMapperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hst.metagen.util.Message.DISCONTINUOUS;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +37,10 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     private final SemesterService semesterService;
     private final ModelMapperService modelMapperService;
     private final LectureRepository lectureRepository;
+    private final MailSenderService mailSenderService;
+    private final StudentRepository studentRepository;
     @Override
-    public void save(CreateAbsenteeismRequest createAbsenteeismRequest) {
+    public void save(CreateAbsenteeismRequest createAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         Lecture lecture = lectureRepository.getById(createAbsenteeismRequest.getLectureId());
         Semester semester = semesterService.getLastSemester();
         LocalDate startDate = createAbsenteeismRequest.getAbsenteeismDate();
@@ -55,7 +63,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
     }
 
     @Override
-    public AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest) {
+    public AbsenteeismDto update(UpdateAbsenteeismRequest updateAbsenteeismRequest) throws MessagingException, UnsupportedEncodingException {
         Absenteeism absenteeism = absenteeismRepository.getByAbsenteeismDateAndLecture_LectureIdAndStudent_StudentId(
                 updateAbsenteeismRequest.getAbsenteeismDate(),
                 updateAbsenteeismRequest.getLectureId(),
@@ -64,8 +72,13 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         if (Objects.isNull(absenteeism)){
             throw new AbsenteeismNotFoundException("Absenteeism is not found");
         }
+        Student student = studentRepository.getById(updateAbsenteeismRequest.getStudentId());
+        Lecture lecture = lectureRepository.getById(updateAbsenteeismRequest.getLectureId());
         absenteeism.setAbsenteeism(updateAbsenteeismRequest.isAbsenteeism());
 
+        String mail = student.getUserMail();
+        String lectureName = lecture.getLectureName();
+        //mailSenderService.sendInfoEmail(mail, DISCONTINUOUS, lectureName);
         return modelMapperService.entityToDto(absenteeismRepository.save(absenteeism), AbsenteeismDto.class);
     }
 
@@ -76,20 +89,21 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
                 AbsenteeismDto.class);
         absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
-        Map<Object, Object> map = convertToMap(absenteeismDtoList);
 
-        return map;
+        return convertToMap(absenteeismDtoList);
     }
 
     @Override
     public AbsenteeismResponse getStudentAbsenteeisms(Long studentId, Long lectureId) {
         Semester semester = semesterService.getLastSemester();
+        List<Absenteeism> absenteeisms = absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate());
+        int count = absenteeisms.size();
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
-                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,studentId,semester.getStartDate(),semester.getEndDate()),
+                absenteeisms,
                 AbsenteeismDto.class);
         absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
-        return convertToResponseForStudent(lectureId, absenteeismDtoList);
+        return convertToResponseForStudent(lectureId, absenteeismDtoList, count);
     }
 
     @Override
@@ -98,18 +112,28 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                 absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDate(lectureId, localDate),
                 AbsenteeismDto.class);
 
-        return convertToResponse(lectureId, absenteeismDtoList);
+        List<Student> students = lectureRepository.getById(lectureId).getLectureStudents();
+
+        Semester semester = semesterService.getLastSemester();
+
+        int count = absenteeismRepository.getAbsenteeismByLecture_LectureIdAndStudent_StudentIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,students.get(0).getStudentId(),semester.getStartDate(),semester.getEndDate()).size();
+
+        return convertToResponse(lectureId, absenteeismDtoList, count);
     }
 
     @Override
     public AbsenteeismResponse getLectureAbsenteesims(Long lectureId, Long semesterId) {
         Semester semester = semesterService.getBySemesterId(semesterId);
+        List<Absenteeism> absenteeisms = absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate());
         List<AbsenteeismDto> absenteeismDtoList = modelMapperService.entityToDtoList(
-                absenteeismRepository.getAbsenteeismByLecture_LectureIdAndAbsenteeismDateGreaterThanEqualAndAbsenteeismDateLessThanEqualOrderByAbsenteeismDate(lectureId,semester.getStartDate(),semester.getEndDate()),
+                absenteeisms,
                 AbsenteeismDto.class);
         absenteeismDtoList = absenteeismDtoList.stream().filter(absenteeismDto -> absenteeismDto.getAbsenteeismDate().isBefore(LocalDate.now().plusDays(1))).collect(Collectors.toList());
 
-        return convertToResponse(lectureId, absenteeismDtoList);
+        List<Student> students = lectureRepository.getById(lectureId).getLectureStudents();
+        int count = absenteeisms.size()/ students.size();
+
+        return convertToResponse(lectureId, absenteeismDtoList, count);
     }
 
     public String getAttendanceInfo(Long lectureId, int count, int disConCount) {
@@ -148,7 +172,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         return map;
     }
 
-    private AbsenteeismResponse convertToResponse(Long lectureId, List<AbsenteeismDto> absenteeismDtoList) {
+    private AbsenteeismResponse convertToResponse(Long lectureId, List<AbsenteeismDto> absenteeismDtoList, int count) {
 
         LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
         LinkedHashSet<String> students = new LinkedHashSet<>();
@@ -170,12 +194,10 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
             LinkedList<Object> row = new LinkedList<>();
             row.add(student);
 
-            int count = 0;
             int disConCount = 0;
             for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
                 if (student.equalsIgnoreCase(getName(absenteeismDto.getUserName(), absenteeismDto.getUserSurname()))) {
                     row.add(absenteeismDto.isAbsenteeism());
-                    count++;
                     if (!absenteeismDto.isAbsenteeism()) {
                         disConCount++;
                     }
@@ -191,13 +213,12 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         return new AbsenteeismResponse(head, body);
     }
 
-    private AbsenteeismResponse convertToResponseForStudent(Long lectureId, List<AbsenteeismDto> absenteeismDtoList) {
+    private AbsenteeismResponse convertToResponseForStudent(Long lectureId, List<AbsenteeismDto> absenteeismDtoList, int count) {
 
         LinkedHashSet<LocalDate> dates = new LinkedHashSet<>();
 
         LinkedList<Object> head = new LinkedList<>();
         LinkedList<LinkedList<Object>> body = new LinkedList<>();
-        int count = 0;
         int disConCount = 0;
 
         head.add("Date");
@@ -214,7 +235,6 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
             for (AbsenteeismDto absenteeismDto : absenteeismDtoList) {
                 if (date.isEqual(absenteeismDto.getAbsenteeismDate())) {
                     row.add(absenteeismDto.isAbsenteeism());
-                    count++;
                     if (!absenteeismDto.isAbsenteeism()) {
                         disConCount++;
                     }
