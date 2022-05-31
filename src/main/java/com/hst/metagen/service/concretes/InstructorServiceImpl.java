@@ -38,6 +38,7 @@ public class InstructorServiceImpl implements InstructorService {
     private final FileService fileService;
     private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
+
     @Override
     public InstructorDto save(CreateInstructorRequest createInstructorRequest) throws IOException {
         Role instructorUser = roleService.getByRoleName("TEACHER_USER");
