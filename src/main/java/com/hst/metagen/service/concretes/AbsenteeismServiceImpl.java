@@ -39,7 +39,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
         while (startDate.isBefore(semester.getEndDate())) {
             List<Student> students = lecture.getLectureStudents();
             for (Student student : students) {
-                boolean hasAlreadyAbsenteeism = absenteeismRepository.existsAbsenteeismByStudent_StudentIdAndLecture_LectureId(student.getStudentId(),lecture.getLectureId());
+                boolean hasAlreadyAbsenteeism = absenteeismRepository.existsAbsenteeismByStudent_StudentIdAndLecture_LectureIdAndAbsenteeismDate(student.getStudentId(),lecture.getLectureId(),startDate);
                 if (Boolean.TRUE.equals(hasAlreadyAbsenteeism)){
                     continue;
                 }
@@ -48,7 +48,7 @@ public class AbsenteeismServiceImpl implements AbsenteeismService {
                         .absenteeismDate(startDate)
                         .lecture(lecture)
                         .student(student).build();
-                absenteeismRepository.save(absenteeism);
+                absenteeism = absenteeismRepository.save(absenteeism);
             }
             startDate = startDate.plusDays(7);
         }

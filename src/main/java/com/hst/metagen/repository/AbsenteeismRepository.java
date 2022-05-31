@@ -23,7 +23,7 @@ public interface AbsenteeismRepository extends JpaRepository<Absenteeism,Long> {
 
     List<Absenteeism> findAbsenteeismsByLecture_LectureId(Long lectureId);
 
-    boolean existsAbsenteeismByStudent_StudentIdAndLecture_LectureId(Long studentId,Long lectureId);
+    boolean existsAbsenteeismByStudent_StudentIdAndLecture_LectureIdAndAbsenteeismDate(Long studentId,Long lectureId,LocalDate absenteeismDate);
 
     void deleteAllByLecture(Lecture lecture);
 }
